@@ -1,0 +1,7 @@
+.*
+*.o
+!.gitignore
+Debug
+*/Debug
+*.class
+doc/
