@@ -22,7 +22,8 @@ private:
 	DBConnector();
 public:
 	static void getDBs(sql::Connection* connection, std::vector<std::string>& databases);
-	static void getTables(sql::Connection* connection, const std::string db, std::vector<std::string>& tables);
+	static void getTables(sql::Connection* connection, const std::string& db, std::vector<std::string>& tables);
+	static void getTableInfo(sql::Connection* connection, const std::string& db, const std::string& table);
 };
 
 } /* namespace account */

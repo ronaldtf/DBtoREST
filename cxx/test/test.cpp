@@ -27,6 +27,7 @@ int main(void) {
 		db::DBConnector::getDBs(cp->popConnection().get(), v);
 		for (std::string s : v)
 			std::cout << s << std::endl;
+		db::DBConnector::getTableInfo(cp->popConnection().get(), "test", "test_table");
 	} catch (sql::SQLException &e) {
 		std::cerr << "ERROR: A problem has occurred: " << e.what() <<
 				     "(mysql error code: " << e.getErrorCode() << ")" << std::endl;

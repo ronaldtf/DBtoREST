@@ -37,6 +37,7 @@ ConnectionPool::ConnectionPool() : _properties(), _pool() {
 		std::cerr << "WARN: Maximum connections has not been (correctly) defined. Use the default (10)" << std::endl;
 	} else {
 		MAX_CONNECTIONS = max_conn;
+		std::cout << "[INFO] " << "Using a pool of " << MAX_CONNECTIONS << " connections..." << std::endl;
 	}
 
 	try {

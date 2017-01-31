@@ -5,7 +5,7 @@
  */
 
 #include "DBConnector.h"
-#include <utility>
+#include "../utils/Utils.h"
 
 namespace db {
 
@@ -36,7 +36,7 @@ void DBConnector::getDBs(sql::Connection* connection, std::vector<std::string>& 
 	}
 }
 
-void DBConnector::getTables(sql::Connection* connection, const std::string db, std::vector<std::string>& tables) {
+void DBConnector::getTables(sql::Connection* connection, const std::string& db, std::vector<std::string>& tables) {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
@@ -49,6 +49,20 @@ void DBConnector::getTables(sql::Connection* connection, const std::string db, s
 		// Get the unique column (offset starts in 1 - not in 0 as C++
 		const std::string dbString = resultSet->getString(1);
 		tables.push_back(dbString);
+	}
+}
+
+void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& table) {
+	std::auto_ptr<sql::Statement> statement;
+	std::auto_ptr<sql::ResultSet> resultSet;
+
+	connection->setSchema(db);
+
+	statement.reset(connection->createStatement());
+	resultSet.reset(statement->executeQuery("DESC " + table));
+
+	while (resultSet->next()) {
+		std::cout << utils::Utils::getType(resultSet->getString(2)) << std::endl;
 	}
 }
 

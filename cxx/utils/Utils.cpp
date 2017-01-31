@@ -75,4 +75,30 @@ int Utils::str2int(std::string& s) {
 	}
 }
 
+Utils::dbVarType Utils::getType(const std::string& s) {
+	std::string tmp = s;
+	std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+
+	if (s.find("char") != std::string::npos ||
+		s.find("text") != std::string::npos ||
+		s.find("blob") != std::string::npos ||
+		s.find("enum") != std::string::npos)
+		return Utils::STRING;
+
+	if (s.find("int")     != std::string::npos ||
+		s.find("float")   != std::string::npos ||
+		s.find("double")  != std::string::npos ||
+		s.find("decimal") != std::string::npos)
+		return Utils::INT;
+
+	if (s.find("date") != std::string::npos ||
+		s.find("time") != std::string::npos ||
+		s.find("year") != std::string::npos)
+		return Utils::DATE;
+
+	return Utils::UNKNOWN;
+
+
+}
+
 } /* namespace account */
