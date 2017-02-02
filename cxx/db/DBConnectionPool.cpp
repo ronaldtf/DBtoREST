@@ -12,14 +12,12 @@
 
 namespace db {
 
-
-const std::string ConnectionPool::DB_CONF = "conf/db.properties";
 unsigned int ConnectionPool::MAX_CONNECTIONS = 10;
 std::shared_ptr<ConnectionPool> ConnectionPool::_instance = nullptr;
 std::mutex ConnectionPool::_creationMutex;
 
 ConnectionPool::ConnectionPool() : _properties(), _pool() {
-	utils::Utils::parseFile(DB_CONF, _properties);
+	utils::Utils::getDBProperties(_properties);
 
 	std::string hostIp = utils::Utils::getIpAddress(_properties.at("dbhost"));
 	if (hostIp.empty()) {

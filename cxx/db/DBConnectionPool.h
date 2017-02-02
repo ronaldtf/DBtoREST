@@ -25,11 +25,13 @@ private:
 	std::string _message;
 public:
 	MaxNoConnectionsException(const std::string& message) : _message(message) {
-	}
+	};
 
-	const char* what() const noexcept {
+	const char* what() const throw() {
 		return _message.c_str();
-	}
+	};
+
+	virtual ~MaxNoConnectionsException() throw() {};
 };
 
 class ConnectionPool {
@@ -46,7 +48,6 @@ private:
 
 	ConnectionPool();
 public:
-	static const std::string DB_CONF;
 	static unsigned int MAX_CONNECTIONS;
 
 	virtual ~ConnectionPool();

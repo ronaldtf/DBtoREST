@@ -14,6 +14,8 @@
 namespace utils {
 
 const char Utils::SEPARATOR = ':';
+const std::string Utils::DB_CONF = "conf/db.properties";
+const std::string Utils::REST_CONF = "conf/rest.properties";
 
 void Utils::trim(std::string &s) {
 	s.erase(s.begin(),  std::find_if(s.begin(),  s.end(),  std::not1(std::ptr_fun<int,int>(std::isspace))));
@@ -53,6 +55,14 @@ void Utils::parseFile(const std::string fileName, std::map<std::string, std::str
 		tokens.clear();
 	}
 	ifs->close();
+}
+
+void Utils::getDBProperties(std::map<std::string, std::string>& properties) {
+	parseFile(DB_CONF, properties);
+}
+
+void Utils::getRESTProperties(std::map<std::string, std::string>& properties) {
+	parseFile(REST_CONF, properties);
 }
 
 std::string Utils::getIpAddress(std::string hostname) {
