@@ -33,6 +33,7 @@ public:
 	static std::string getIpAddress(std::string hostname);
 	static int str2int(std::string& s);
 	static dbVarType getType(const std::string& s);
+	static void getJson(const std::string& root, const std::vector<std::string> elements, std::string& jsonText);
 
 };
 

@@ -36,7 +36,7 @@ public:
 
 class ConnectionPool {
 private:
-	sql::Driver* driver;
+	sql::Driver* _driver;
 	std::map<std::string, std::string> _properties;
 	std::deque<std::shared_ptr<sql::Connection> > _pool;
 

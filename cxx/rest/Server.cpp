@@ -10,6 +10,8 @@
 #include <memory>
 #include <restbed>
 
+#include "../db/DBConnectionPool.h"
+#include "../db/DBConnector.h"
 #include "../utils/Utils.h"
 
 std::string getHost(std::map<std::string, std::string>& properties) {
@@ -44,15 +46,14 @@ void errorHandler( const int, const std::exception&, const std::shared_ptr<restb
 
 void rootHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
-	    std::string body = "DBtoREST";
-	    for ( const auto key : session->keys( ) ) {
-	        std::string value = session->get(key);
-	        body += key + "=" + value + "\n";
-	    }
-	    const auto request = session->get_request( );
-	    for (std::pair<std::string, std::string> param : request->get_query_parameters()) {
-	        session->set(param.first, param.second);
-	    }
+	    std::vector<std::string> databases;
+	    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
+	    std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
+	    db::DBConnector::getDBs(connection.get(), databases);
+	    connectionPool->pushConnection(connection);
+	    std::string body;
+	    utils::Utils::getJson("databases", databases, body);
+
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {
 		std::cerr << "Internal server error" << std::endl;
