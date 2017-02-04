@@ -102,6 +102,7 @@ void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 		db = request->get_path_parameter("dbname", "/");
 		table = request->get_path_parameter("tablename", "/");
 
+		// TODO: fill information here and add it to body
 	    std::string body;
 
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
