@@ -109,18 +109,4 @@ Utils::dbVarType Utils::getType(const std::string& s) {
 	return Utils::UNKNOWN;
 }
 
-void Utils::getJson(const std::string& root, const std::vector<std::string> elements, std::string& jsonText) {
-	const std::string endl = "\n";
-	jsonText.clear();
-	jsonText += "{" + endl;
-	jsonText += root + ": [";
-	for (const std::string s : elements) {
-		jsonText += endl + s + ",";
-	}
-	if (jsonText.at(jsonText.size() - 1) == ',')
-		jsonText = jsonText.substr(0, jsonText.size() - 1);
-	jsonText += endl + "]" + endl;
-	jsonText += "}" + endl;
-}
-
 } /* namespace account */

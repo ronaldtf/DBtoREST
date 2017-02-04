@@ -6,3 +6,4 @@ The idea behind this project is to show through the REST interface the contents 
 1. MySQL
 2. MySQL connector
 3. Restbed
+4. RapidJson

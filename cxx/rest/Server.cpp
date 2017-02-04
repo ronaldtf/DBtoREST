@@ -10,6 +10,7 @@
 #include <memory>
 #include <restbed>
 
+#include "JsonGenerator.h"
 #include "../db/DBConnectionPool.h"
 #include "../db/DBConnector.h"
 #include "../utils/Utils.h"
@@ -52,7 +53,7 @@ void rootHandler(const std::shared_ptr<restbed::Session> session) {
 	    db::DBConnector::getDBs(connection.get(), databases);
 	    connectionPool->pushConnection(connection);
 	    std::string body;
-	    utils::Utils::getJson("databases", databases, body);
+	    rest::JsonGenerator::getJson("databases", databases, body);
 
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {
