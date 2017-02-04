@@ -72,6 +72,7 @@ void datbaseHandler(const std::shared_ptr<restbed::Session> session) {
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {
 		std::cerr << "Internal server error" << std::endl;
+		session->close(400, "Internal server error");
 	}
 }
 
@@ -90,6 +91,7 @@ void tablesHandler(const std::shared_ptr<restbed::Session> session) {
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {
 		std::cerr << "Internal server error" << std::endl;
+		session->close(400, "Internal server error");
 	}
 }
 
@@ -107,6 +109,7 @@ void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {
 		std::cerr << "Internal server error" << std::endl;
+		session->close(400, "Internal server error");
 	}
 }
 
