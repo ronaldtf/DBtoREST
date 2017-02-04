@@ -40,15 +40,14 @@ void DBConnector::getTables(sql::Connection* connection, const std::string& db, 
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
-	tables = std::vector<std::string>();
 	connection->setSchema(db);
 
 	statement.reset(connection->createStatement());
 	resultSet.reset(statement->executeQuery("SHOW TABLES from " + db));
 	while (resultSet->next()) {
 		// Get the unique column (offset starts in 1 - not in 0 as C++
-		const std::string dbString = resultSet->getString(1);
-		tables.push_back(dbString);
+		const std::string tableName = resultSet->getString(1);
+		tables.push_back(tableName);
 	}
 }
 
