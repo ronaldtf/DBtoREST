@@ -8,6 +8,8 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
+#include <iostream>
+
 namespace rest {
 
 void JsonGenerator::getJson(const std::string& root, const std::vector<std::string> elements, std::string& jsonText) {
@@ -42,8 +44,9 @@ void JsonGenerator::getJson(rapidjson::Document::AllocatorType& docAlloc, const 
 	size_t numRows = values.size();
 	rapidjson::Value key(columnName.c_str(), docAlloc);
 	for (size_t pos = 0; pos < numRows; ++pos) {
-		rapidjson::Value& value = jsonElements.at(pos);
-		jsonElements.at(pos).AddMember(key,value, docAlloc);
+		rapidjson::Value key(columnName.c_str(), docAlloc);
+		rapidjson::Value val(values.at(pos).c_str(), docAlloc);
+		jsonElements.at(pos).AddMember(key,val, docAlloc);
 	}
 
 	getJson(docAlloc, table->getNeighbor(), jsonElements);
@@ -68,6 +71,17 @@ void JsonGenerator::getJson(const std::string& root, const std::shared_ptr<db::t
 	for (rapidjson::Value& v : members)
 		v.SetObject();
 	getJson(docAlloc, table, members);
+
+	for (rapidjson::Value& member : members) {
+		rapidjson::Value key(root.c_str(), docAlloc);
+		document.AddMember(key, member, docAlloc);
+	}
+
+	rapidjson::StringBuffer strBuf;
+	rapidjson::Writer<rapidjson::StringBuffer> writer = rapidjson::Writer<rapidjson::StringBuffer>(strBuf);
+	document.Accept(writer);
+
+	jsonText = strBuf.GetString();
 }
 
 } /* namespace rest */

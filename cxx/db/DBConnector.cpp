@@ -51,7 +51,7 @@ void DBConnector::getTables(sql::Connection* connection, const std::string& db, 
 	}
 }
 
-void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, std::shared_ptr<db::table::Column> table) {
+void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, std::shared_ptr<db::table::Column>& table) {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
@@ -89,10 +89,6 @@ void DBConnector::getTableInfo(sql::Connection* connection, const std::string& d
 		}
 		neighbor = neighbor->getNeighbor().get();
 	}
-
-	statement.reset(connection->createStatement());
-	resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
-
 }
 
 } /* namespace account */
