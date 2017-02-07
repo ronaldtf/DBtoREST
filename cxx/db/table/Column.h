@@ -14,29 +14,32 @@
 namespace db {
 namespace table {
 
-template<class T>
 class Column {
 private:
 	std::string columnName;
-	std::vector<T> values;
-	std::vector<std::shared_ptr<Column> > neighbors;
+	std::vector<std::string> values;
+	std::vector<std::shared_ptr<Column>> neighbors;
 
 public:
+	Column();
+
 	Column(std::string columnName);
 
-	Column(std::string columnName, T value);
+	Column(std::string columnName, std::string value);
 
 	Column(const Column& c);
 
 	virtual ~Column();
 
-	void addValue(T value);
+	void addValue(std::string value);
 
-	void getValues(std::vector<T>& values);
+	void getValues(std::vector<std::string>& values) const;
 
-	std::string getColumnName();
+	std::string getColumnName() const;
 
-	void addNeighbor(Column& column);
+	void addNeighbor(std::shared_ptr<Column> column);
+
+	void getNeighbors(std::vector<std::shared_ptr<Column>>& n) const;
 };
 
 }

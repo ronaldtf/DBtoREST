@@ -5,7 +5,6 @@
  */
 
 #include "JsonGenerator.h"
-#include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
@@ -30,6 +29,47 @@ void JsonGenerator::getJson(const std::string& root, const std::vector<std::stri
 	document.Accept(writer);
 
 	jsonText = strBuf.GetString();
+}
+
+void JsonGenerator::getJson(rapidjson::Document::AllocatorType& docAlloc, const db::table::Column& table, std::vector<rapidjson::Value>& jsonElements, bool isFirst) {
+	std::string columnName = table.getColumnName();
+
+	std::vector<std::string> values;
+	table.getValues(values);
+
+	size_t numRows = values.size();
+	rapidjson::Value key(columnName.c_str(), docAlloc);
+	for (size_t pos = 0; pos < numRows; ++pos) {
+		rapidjson::Value& value = jsonElements.at(pos);
+		jsonElements.at(pos).AddMember(key,value, docAlloc);
+	}
+
+	if (isFirst) {
+		std::vector<std::shared_ptr<db::table::Column>> neighbors;
+		table.getNeighbors(neighbors);
+		if (!neighbors.empty()) {
+			for (auto n : neighbors) {
+				getJson(docAlloc, *n, jsonElements, false);
+			}
+		}
+	}
+}
+
+void JsonGenerator::getJson(const std::string& root, const db::table::Column& table, std::string& jsonText) {
+	rapidjson::Document document;
+	document.SetObject();
+	rapidjson::Document::AllocatorType& docAlloc = document.GetAllocator();
+
+	rapidjson::Value list = rapidjson::Value(rapidjson::kArrayType);
+
+	std::vector<std::string> column;
+	table.getValues(column);
+	size_t numRows = column.size();
+
+	std::vector<rapidjson::Value> members = std::vector<rapidjson::Value>(numRows);
+	for (rapidjson::Value& v : members)
+		v.SetObject();
+	getJson(docAlloc, table, members);
 }
 
 } /* namespace rest */

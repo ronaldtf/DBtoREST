@@ -51,14 +51,14 @@ void DBConnector::getTables(sql::Connection* connection, const std::string& db, 
 	}
 }
 
-void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& table) {
+void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, db::table::Column& table) {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
 	connection->setSchema(db);
 
 	statement.reset(connection->createStatement());
-	resultSet.reset(statement->executeQuery("DESC " + table));
+	resultSet.reset(statement->executeQuery("DESC " + tableName));
 
 	while (resultSet->next()) {
 		std::cout << utils::Utils::getType(resultSet->getString(2)) << std::endl;

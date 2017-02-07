@@ -10,10 +10,11 @@
 #include <memory>
 #include <restbed>
 
-#include "JsonGenerator.h"
 #include "../db/DBConnectionPool.h"
 #include "../db/DBConnector.h"
 #include "../utils/Utils.h"
+#include "JsonGenerator.h"
+#include "../db/table/Column.h"
 
 std::string getHost(std::map<std::string, std::string>& properties) {
 	std::string hostIp = "";
@@ -61,6 +62,13 @@ void getTables(const std::string dbName, std::vector<std::string>& tables) {
     connectionPool->pushConnection(connection);
 }
 
+void getSingleTable(const std::string dbName, const std::string tableName, db::table::Column& table) {
+    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
+    std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
+    db::DBConnector::getTableInfo(connection.get(), dbName, tableName, table);
+    connectionPool->pushConnection(connection);
+}
+
 void datbaseHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
 	    std::vector<std::string> databases;
@@ -96,14 +104,15 @@ void tablesHandler(const std::shared_ptr<restbed::Session> session) {
 
 void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
-		std::string db;
-		std::string table;
 		const std::shared_ptr<const restbed::Request> request = session->get_request();
-		db = request->get_path_parameter("dbname", "/");
-		table = request->get_path_parameter("tablename", "/");
+		const std::string dbName = request->get_path_parameter("dbname", "/");
+		const std::string tableName = request->get_path_parameter("tablename", "/");
 
-		// TODO: fill information here and add it to body
+		db::table::Column table;
+		getSingleTable(dbName, tableName, table);
+
 	    std::string body;
+		rest::JsonGenerator::getJson(tableName, table, body);
 
 	    session->close(restbed::OK, body, { { "Connection", "close" } } );
 	} else {

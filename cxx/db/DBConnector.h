@@ -15,6 +15,8 @@
 #include <memory>
 #include <vector>
 
+#include "table/Column.h"
+
 namespace db {
 
 class DBConnector {
@@ -23,7 +25,7 @@ private:
 public:
 	static void getDBs(sql::Connection* connection, std::vector<std::string>& databases);
 	static void getTables(sql::Connection* connection, const std::string& db, std::vector<std::string>& tables);
-	static void getTableInfo(sql::Connection* connection, const std::string& db, const std::string& table);
+	static void getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, db::table::Column& table);
 };
 
 } /* namespace account */
