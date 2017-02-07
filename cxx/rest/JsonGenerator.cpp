@@ -31,11 +31,13 @@ void JsonGenerator::getJson(const std::string& root, const std::vector<std::stri
 	jsonText = strBuf.GetString();
 }
 
-void JsonGenerator::getJson(rapidjson::Document::AllocatorType& docAlloc, const db::table::Column& table, std::vector<rapidjson::Value>& jsonElements, bool isFirst) {
-	std::string columnName = table.getColumnName();
+void JsonGenerator::getJson(rapidjson::Document::AllocatorType& docAlloc, const std::shared_ptr<db::table::Column> table, std::vector<rapidjson::Value>& jsonElements) {
+	if (table == nullptr)
+		return;
+	std::string columnName = table->getColumnName();
 
 	std::vector<std::string> values;
-	table.getValues(values);
+	table->getValues(values);
 
 	size_t numRows = values.size();
 	rapidjson::Value key(columnName.c_str(), docAlloc);
@@ -44,18 +46,14 @@ void JsonGenerator::getJson(rapidjson::Document::AllocatorType& docAlloc, const 
 		jsonElements.at(pos).AddMember(key,value, docAlloc);
 	}
 
-	if (isFirst) {
-		std::vector<std::shared_ptr<db::table::Column>> neighbors;
-		table.getNeighbors(neighbors);
-		if (!neighbors.empty()) {
-			for (auto n : neighbors) {
-				getJson(docAlloc, *n, jsonElements, false);
-			}
-		}
-	}
+	getJson(docAlloc, table->getNeighbor(), jsonElements);
 }
 
-void JsonGenerator::getJson(const std::string& root, const db::table::Column& table, std::string& jsonText) {
+void JsonGenerator::getJson(const std::string& root, const std::shared_ptr<db::table::Column> table, std::string& jsonText) {
+
+	if (table == nullptr)
+		return;
+
 	rapidjson::Document document;
 	document.SetObject();
 	rapidjson::Document::AllocatorType& docAlloc = document.GetAllocator();
@@ -63,7 +61,7 @@ void JsonGenerator::getJson(const std::string& root, const db::table::Column& ta
 	rapidjson::Value list = rapidjson::Value(rapidjson::kArrayType);
 
 	std::vector<std::string> column;
-	table.getValues(column);
+	table->getValues(column);
 	size_t numRows = column.size();
 
 	std::vector<rapidjson::Value> members = std::vector<rapidjson::Value>(numRows);

@@ -62,7 +62,7 @@ void getTables(const std::string dbName, std::vector<std::string>& tables) {
     connectionPool->pushConnection(connection);
 }
 
-void getSingleTable(const std::string dbName, const std::string tableName, db::table::Column& table) {
+void getSingleTable(const std::string dbName, const std::string tableName, std::shared_ptr<db::table::Column> table) {
     std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
     std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
     db::DBConnector::getTableInfo(connection.get(), dbName, tableName, table);
@@ -108,7 +108,7 @@ void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 		const std::string dbName = request->get_path_parameter("dbname", "/");
 		const std::string tableName = request->get_path_parameter("tablename", "/");
 
-		db::table::Column table;
+		std::shared_ptr<db::table::Column> table;
 		getSingleTable(dbName, tableName, table);
 
 	    std::string body;

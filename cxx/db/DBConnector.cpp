@@ -51,7 +51,7 @@ void DBConnector::getTables(sql::Connection* connection, const std::string& db, 
 	}
 }
 
-void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, db::table::Column& table) {
+void DBConnector::getTableInfo(sql::Connection* connection, const std::string& db, const std::string& tableName, std::shared_ptr<db::table::Column> table) {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
@@ -60,9 +60,39 @@ void DBConnector::getTableInfo(sql::Connection* connection, const std::string& d
 	statement.reset(connection->createStatement());
 	resultSet.reset(statement->executeQuery("DESC " + tableName));
 
+	table = nullptr;
+	db::table::Column* neighbor = nullptr;
+
+	size_t numColumns = 0;
 	while (resultSet->next()) {
-		std::cout << utils::Utils::getType(resultSet->getString(2)) << std::endl;
+		if (numColumns == 0) {
+			table = std::shared_ptr<db::table::Column>(new db::table::Column(resultSet->getString(1)));
+			neighbor = table.get();
+		} else {
+			std::shared_ptr<db::table::Column> next = std::shared_ptr<db::table::Column>(new db::table::Column(resultSet->getString(1)));
+			neighbor->setNeighbor(next);
+			neighbor = next.get();
+		}
+		++numColumns;
 	}
+
+	statement.reset(connection->createStatement());
+	resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
+
+	if (!resultSet->next())
+		return;
+
+	neighbor = table.get();
+	while (resultSet->next()) {
+		for (size_t i = 1; i<=numColumns; ++i) {
+			neighbor->addValue(resultSet->getString(i));
+		}
+		neighbor = neighbor->getNeighbor().get();
+	}
+
+	statement.reset(connection->createStatement());
+	resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
+
 }
 
 } /* namespace account */

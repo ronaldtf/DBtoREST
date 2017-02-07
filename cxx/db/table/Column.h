@@ -8,6 +8,7 @@
 #define CXX_DB_TABLE_COLUMN_H_
 
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -18,7 +19,7 @@ class Column {
 private:
 	std::string columnName;
 	std::vector<std::string> values;
-	std::vector<std::shared_ptr<Column>> neighbors;
+	std::shared_ptr<Column> neighbor;
 
 public:
 	Column();
@@ -37,9 +38,9 @@ public:
 
 	std::string getColumnName() const;
 
-	void addNeighbor(std::shared_ptr<Column> column);
+	void setNeighbor(std::shared_ptr<Column> column);
 
-	void getNeighbors(std::vector<std::shared_ptr<Column>>& n) const;
+	std::shared_ptr<Column> getNeighbor() const;
 };
 
 }

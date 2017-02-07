@@ -9,28 +9,25 @@
 namespace db {
 namespace table{
 
-Column::Column() : columnName(""), values(), neighbors() {
+Column::Column() : columnName(""), values(), neighbor(nullptr) {
 }
 
-Column::Column(std::string columnName) : columnName(columnName), values(), neighbors() {
+Column::Column(std::string columnName) : columnName(columnName), values(), neighbor(nullptr) {
 
 }
 
-Column::Column(std::string columnName, std::string value) : columnName(columnName), values(), neighbors() {
+Column::Column(std::string columnName, std::string value) : columnName(columnName), values(), neighbor(nullptr) {
 	values.push_back(value);
 }
 
 Column::Column(const Column& c) {
 	this->columnName = c.columnName;
 	std::copy(c.values.begin(), c.values.end(), this->values.begin());
-	for (std::shared_ptr<Column> column : c.neighbors) {
-		this->neighbors.push_back(std::shared_ptr<Column>(new Column(*column)));
-	}
+	this->neighbor = c.getNeighbor();
 }
 
 Column::~Column() {
 	this->values.clear();
-	this->neighbors.clear();
 }
 
 void Column::addValue(std::string value) {
@@ -45,12 +42,12 @@ std::string Column::getColumnName() const {
 	return this->columnName;
 }
 
-void Column::addNeighbor(std::shared_ptr<Column> column) {
-	this->neighbors.push_back(column);
+void Column::setNeighbor(std::shared_ptr<Column> column) {
+	this->neighbor = column;
 }
 
-void Column::getNeighbors(std::vector<std::shared_ptr<Column>>& n) const {
-	n = this->neighbors;
+std::shared_ptr<Column>  Column::getNeighbor() const {
+	return this->neighbor;
 }
 
 
