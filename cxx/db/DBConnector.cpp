@@ -79,15 +79,12 @@ void DBConnector::getTableInfo(sql::Connection* connection, const std::string& d
 	statement.reset(connection->createStatement());
 	resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
 
-	if (!resultSet->next())
-		return;
-
-	neighbor = table.get();
 	while (resultSet->next()) {
+		neighbor = table.get();
 		for (size_t i = 1; i<=numColumns; ++i) {
 			neighbor->addValue(resultSet->getString(i));
+			neighbor = neighbor->getNeighbor().get();
 		}
-		neighbor = neighbor->getNeighbor().get();
 	}
 }
 

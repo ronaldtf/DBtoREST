@@ -68,14 +68,18 @@ void JsonGenerator::getJson(const std::string& root, const std::shared_ptr<db::t
 	size_t numRows = column.size();
 
 	std::vector<rapidjson::Value> members = std::vector<rapidjson::Value>(numRows);
-	for (rapidjson::Value& v : members)
+	for (rapidjson::Value& v : members) {
 		v.SetObject();
+	}
 	getJson(docAlloc, table, members);
 
 	for (rapidjson::Value& member : members) {
 		rapidjson::Value key(root.c_str(), docAlloc);
-		document.AddMember(key, member, docAlloc);
+		list.PushBack(member, docAlloc);
 	}
+
+	rapidjson::Value rootJson(root.c_str(), docAlloc);
+	document.AddMember(rootJson, list, docAlloc);
 
 	rapidjson::StringBuffer strBuf;
 	rapidjson::Writer<rapidjson::StringBuffer> writer = rapidjson::Writer<rapidjson::StringBuffer>(strBuf);
