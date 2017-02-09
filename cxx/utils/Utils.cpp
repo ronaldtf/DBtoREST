@@ -44,6 +44,9 @@ void Utils::parseFile(const std::string fileName, std::map<std::string, std::str
 	std::string line;
 	std::vector<std::string> tokens;
 	while (std::getline(*ifs, line)) {
+		// Disable comment or empty lines
+		if (line.empty() || line.at(0) == '#')
+			continue;
 		trim(line);
 		tokens = tokenize(line);
 		if (tokens.size() < 2) {
