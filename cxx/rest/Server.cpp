@@ -5,6 +5,7 @@
  */
 
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -69,7 +70,7 @@ void getSingleTable(const std::string dbName, const std::string tableName, std::
     connectionPool->pushConnection(connection);
 }
 
-void datbaseHandler(const std::shared_ptr<restbed::Session> session) {
+void databaseHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
 	    std::vector<std::string> databases;
 	    getDBs(databases);
@@ -121,6 +122,21 @@ void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 	}
 }
 
+void swaggerJson(const std::shared_ptr<restbed::Session> session) {
+	std::string body;
+	std::string tmpStr;
+
+	std::ifstream ifstr = std::ifstream(std::string("rest/swagger/swagger.json").c_str());
+	while (std::getline(ifstr, tmpStr)) {
+		utils::Utils::trim(tmpStr);
+		body += tmpStr + " ";
+	}
+	std::cout << body << std::endl;
+	ifstr.close();
+	session->set_headers({{"Access-Control-Allow-Methods", "PST,GET,OPTIONS,PUT"},{"Access-Control-Allow-Origin", "*"}});
+	session->close(restbed::OK, body, { {"Connection", "close"} });
+}
+
 int main() {
 
 	std::map<std::string, std::string> properties;
@@ -134,11 +150,16 @@ int main() {
 	settings->set_port(port);
 	settings->set_root("/");
 
+	std::shared_ptr<restbed::Resource> swaggerJsonService = std::shared_ptr<restbed::Resource>(new restbed::Resource());
+	swaggerJsonService->set_path("/swagger.json");
+	swaggerJsonService->set_method_handler("GET", swaggerJson);
+	service.publish(swaggerJsonService);
+
 	// Service to show databases
 	std::shared_ptr<restbed::Resource> dbsRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
 	dbsRequest->set_paths(std::set<std::string>{"/"});
 	dbsRequest->set_error_handler(&errorHandler);
-	dbsRequest->set_method_handler("GET", datbaseHandler);
+	dbsRequest->set_method_handler("GET", databaseHandler);
 	service.publish(dbsRequest);
 
 	std::vector<std::string> dbs;
