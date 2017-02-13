@@ -72,12 +72,17 @@ void getSingleTable(const std::string dbName, const std::string tableName, std::
 
 void databaseHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
-	    std::vector<std::string> databases;
-	    getDBs(databases);
-	    std::string body;
-	    rest::JsonGenerator::getJson("databases", databases, body);
+		try {
+			std::vector<std::string> databases;
+			getDBs(databases);
+			std::string body;
+			rest::JsonGenerator::getJson("databases", databases, body);
 
-	    session->close(restbed::OK, body, { { "Connection", "close" } } );
+			session->close(restbed::OK, body, { { "Connection", "close" } } );
+		} catch (...) {
+			std::cerr << "Internal server error" << std::endl;
+			session->close(400, "Internal server error");
+		}
 	} else {
 		std::cerr << "Internal server error" << std::endl;
 		session->close(400, "Internal server error");
@@ -86,17 +91,22 @@ void databaseHandler(const std::shared_ptr<restbed::Session> session) {
 
 void tablesHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
-		std::string db;
-		const std::shared_ptr<const restbed::Request> request = session->get_request();
-		db = request->get_path_parameter("dbname", "/");
+		try {
+			std::string db;
+			const std::shared_ptr<const restbed::Request> request = session->get_request();
+			db = request->get_path_parameter("dbname", "/");
 
-		std::vector<std::string> tables;
-		getTables(db, tables);
-	    std::string body;
+			std::vector<std::string> tables;
+			getTables(db, tables);
+			std::string body;
 
-	    rest::JsonGenerator::getJson("tables", tables, body);
+			rest::JsonGenerator::getJson("tables", tables, body);
 
-	    session->close(restbed::OK, body, { { "Connection", "close" } } );
+			session->close(restbed::OK, body, { { "Connection", "close" } } );
+		} catch (...) {
+			std::cerr << "Internal server error" << std::endl;
+			session->close(400, "Internal server error");
+		}
 	} else {
 		std::cerr << "Internal server error" << std::endl;
 		session->close(400, "Internal server error");
@@ -105,17 +115,22 @@ void tablesHandler(const std::shared_ptr<restbed::Session> session) {
 
 void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
-		const std::shared_ptr<const restbed::Request> request = session->get_request();
-		const std::string dbName = request->get_path_parameter("dbname", "/");
-		const std::string tableName = request->get_path_parameter("tablename", "/");
+		try {
+			const std::shared_ptr<const restbed::Request> request = session->get_request();
+			const std::string dbName = request->get_path_parameter("dbname", "/");
+			const std::string tableName = request->get_path_parameter("tablename", "/");
 
-		std::shared_ptr<db::table::Column> table;
-		getSingleTable(dbName, tableName, table);
+			std::shared_ptr<db::table::Column> table;
+			getSingleTable(dbName, tableName, table);
 
-	    std::string body;
-		rest::JsonGenerator::getJson(tableName, table, body);
+			std::string body;
+			rest::JsonGenerator::getJson(tableName, table, body);
 
-	    session->close(restbed::OK, body, { { "Connection", "close" } } );
+			session->close(restbed::OK, body, { { "Connection", "close" } } );
+		} catch (...) {
+			std::cerr << "Internal server error" << std::endl;
+			session->close(400, "Internal server error");
+		}
 	} else {
 		std::cerr << "Internal server error" << std::endl;
 		session->close(400, "Internal server error");
@@ -161,28 +176,18 @@ int main() {
 	dbsRequest->set_method_handler("GET", databaseHandler);
 	service.publish(dbsRequest);
 
-	std::vector<std::string> dbs;
-	getDBs(dbs);
-	for (const std::string db : dbs) {
+	std::shared_ptr<restbed::Resource> tablesRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
+	tablesRequest->set_path("/{dbname:.*}");
+	tablesRequest->set_error_handler(&errorHandler);
+	tablesRequest->set_method_handler("GET", tablesHandler);
+	service.publish(tablesRequest);
 
-		// Service to show tables in a database
-		std::shared_ptr<restbed::Resource> tablesRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
-		tablesRequest->set_path("/{dbname:" + db + "}");
-		tablesRequest->set_error_handler(&errorHandler);
-		tablesRequest->set_method_handler("GET", tablesHandler);
-		service.publish(tablesRequest);
-
-		std::vector<std::string> tables;
-		getTables(db, tables);
-		for (const std::string table : tables) {
-			// Service to show table
-			std::shared_ptr<restbed::Resource> tableRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
-			tableRequest->set_path("/{dbname:" + db + "}/{tablename:" + table + "}");
-			tableRequest->set_error_handler(&errorHandler);
-			tableRequest->set_method_handler("GET", singleTableHandler);
-			service.publish(tableRequest);
-		}
-	}
+	// Service to show table
+	std::shared_ptr<restbed::Resource> tableRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
+	tableRequest->set_path("/{dbname:.*}/{tablename:.*}");
+	tableRequest->set_error_handler(&errorHandler);
+	tableRequest->set_method_handler("GET", singleTableHandler);
+	service.publish(tableRequest);
 
 	service.set_error_handler(&errorHandler);
 
