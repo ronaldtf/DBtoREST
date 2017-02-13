@@ -131,7 +131,6 @@ void swaggerJson(const std::shared_ptr<restbed::Session> session) {
 		utils::Utils::trim(tmpStr);
 		body += tmpStr + " ";
 	}
-	std::cout << body << std::endl;
 	ifstr.close();
 	session->set_headers({{"Access-Control-Allow-Methods", "PST,GET,OPTIONS,PUT"},{"Access-Control-Allow-Origin", "*"}});
 	session->close(restbed::OK, body, { {"Connection", "close"} });
