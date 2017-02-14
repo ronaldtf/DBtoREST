@@ -6,7 +6,7 @@
 
 #include "JsonGenerator.h"
 #include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 
 #include <iostream>
 
@@ -27,7 +27,7 @@ void JsonGenerator::getJson(const std::string& root, const std::vector<std::stri
 	document.AddMember(rootJson, list, docAlloc);
 
 	rapidjson::StringBuffer strBuf;
-	rapidjson::Writer<rapidjson::StringBuffer> writer = rapidjson::Writer<rapidjson::StringBuffer>(strBuf);
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer = rapidjson::PrettyWriter<rapidjson::StringBuffer>(strBuf);
 	document.Accept(writer);
 
 	jsonText = strBuf.GetString();
@@ -82,7 +82,7 @@ void JsonGenerator::getJson(const std::string& root, const std::shared_ptr<db::t
 	document.AddMember(rootJson, list, docAlloc);
 
 	rapidjson::StringBuffer strBuf;
-	rapidjson::Writer<rapidjson::StringBuffer> writer = rapidjson::Writer<rapidjson::StringBuffer>(strBuf);
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer = rapidjson::PrettyWriter<rapidjson::StringBuffer>(strBuf);
 	document.Accept(writer);
 
 	jsonText = strBuf.GetString();
