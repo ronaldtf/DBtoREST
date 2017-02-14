@@ -177,14 +177,14 @@ int main() {
 	service.publish(dbsRequest);
 
 	std::shared_ptr<restbed::Resource> tablesRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
-	tablesRequest->set_path("/{dbname:.*}");
+	tablesRequest->set_path("/alltables/{dbname:.*}");
 	tablesRequest->set_error_handler(&errorHandler);
 	tablesRequest->set_method_handler("GET", tablesHandler);
 	service.publish(tablesRequest);
 
 	// Service to show table
 	std::shared_ptr<restbed::Resource> tableRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
-	tableRequest->set_path("/{dbname:.*}/{tablename:.*}");
+	tableRequest->set_path("/table/{dbname:.*}/{tablename:.*}");
 	tableRequest->set_error_handler(&errorHandler);
 	tableRequest->set_method_handler("GET", singleTableHandler);
 	service.publish(tableRequest);
