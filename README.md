@@ -7,3 +7,5 @@ The idea behind this project is to show through the REST interface the contents 
 2. MySQL connector
 3. Restbed
 4. RapidJson
+5. Swagger (optional)
+6. http-server (optional)
