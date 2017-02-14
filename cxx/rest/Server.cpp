@@ -70,6 +70,17 @@ void getSingleTable(const std::string dbName, const std::string tableName, std::
     connectionPool->pushConnection(connection);
 }
 
+void getResponse(int responseCode, std::string& body, restbed::Response& response) {
+	response.add_header("Access-Control-Allow-Origin", "*");
+	response.add_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+	response.add_header("Access-Control-Max-Age", "3600");
+	response.add_header("Access-Control-Allow-Headers", "x-requested-with");
+
+	response.set_status_code(responseCode);
+	response.set_body(body);
+	response.add_header("Connection", "close");
+}
+
 void databaseHandler(const std::shared_ptr<restbed::Session> session) {
 	if (session->is_open()) {
 		try {
@@ -78,7 +89,9 @@ void databaseHandler(const std::shared_ptr<restbed::Session> session) {
 			std::string body;
 			rest::JsonGenerator::getJson("databases", databases, body);
 
-			session->close(restbed::OK, body, { { "Connection", "close" } } );
+			restbed::Response response;
+			getResponse(restbed::OK, body, response);
+			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
 			session->close(400, "Internal server error");
@@ -102,7 +115,9 @@ void tablesHandler(const std::shared_ptr<restbed::Session> session) {
 
 			rest::JsonGenerator::getJson("tables", tables, body);
 
-			session->close(restbed::OK, body, { { "Connection", "close" } } );
+			restbed::Response response;
+			getResponse(restbed::OK, body, response);
+			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
 			session->close(400, "Internal server error");
@@ -126,7 +141,9 @@ void singleTableHandler(const std::shared_ptr<restbed::Session> session) {
 			std::string body;
 			rest::JsonGenerator::getJson(tableName, table, body);
 
-			session->close(restbed::OK, body, { { "Connection", "close" } } );
+			restbed::Response response;
+			getResponse(restbed::OK, body, response);
+			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
 			session->close(400, "Internal server error");
