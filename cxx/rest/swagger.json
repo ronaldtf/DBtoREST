@@ -104,7 +104,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "An array of products",
+                        "description": "Contents of the table",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -124,10 +124,10 @@
     },
     "definitions": {
         "Databases": {
-            "type": "array"
+            "type": "object"
         },
         "Tables": {
-            "type": "array",
+            "type": "object",
             "properties": {
                 "database": {
                     "type": "string",
