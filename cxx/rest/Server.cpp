@@ -158,7 +158,7 @@ void swaggerJson(const std::shared_ptr<restbed::Session> session) {
 	std::string body;
 	std::string tmpStr;
 
-	std::ifstream ifstr = std::ifstream(std::string("rest/swagger.json").c_str());
+	std::ifstream ifstr = std::ifstream(std::string("../swagger/swagger.json").c_str());
 	while (std::getline(ifstr, tmpStr)) {
 		utils::Utils::trim(tmpStr);
 		body += tmpStr + " ";

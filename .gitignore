@@ -6,4 +6,4 @@ Debug
 *.class
 doc/
 **/Server
-cxx/rest/swagger
+swagger/swagger
