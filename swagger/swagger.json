@@ -12,7 +12,8 @@
     ],
     "basePath": "/",
     "produces": [
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/": {
