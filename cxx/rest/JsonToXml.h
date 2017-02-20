@@ -15,7 +15,7 @@ class JsonToXml {
 private:
 	static std::string convertToOneLine(const std::string& s);
 	static size_t searchTag(const std::string& json, const size_t start, const size_t end, std::string& tag);
-	static std::string getSubTags(std::string rootTag, std::string tagList);
+	static std::string getSubTags(const std::string rootTag, const std::string tagList, const int level);
 	static std::string parseJson(const std::string& jsonString, size_t start, size_t end, int level = 0);
 public:
 	static std::string json2xml(const std::string& jsonString, const std::string rootTag);

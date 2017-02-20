@@ -67,17 +67,17 @@ size_t JsonToXml::searchTag(const std::string& json, const size_t start, const s
     return endTagPos;
 }
 
-std::string JsonToXml::getSubTags(std::string rootTag, std::string tagList) {
+std::string JsonToXml::getSubTags(const std::string rootTag, const std::string tagList, const int level) {
     size_t start = 0;
     // utils::Utils::trim(tagList)
     std::string out = "";
     size_t endPos = 0;
     while ((endPos = tagList.find_first_of(',', start)) != std::string::npos) {
-        out += "<" + rootTag + ">" + tagList.substr(start+1,endPos-start-2) + "</" + rootTag + ">" + "\n";
+        out += std::string(level, '\t') + "<" + rootTag + ">" + tagList.substr(start+1,endPos-start-2) + "</" + rootTag + ">" + "\n";
         start=endPos+1;
     }
     if (start < tagList.size())
-        out += "<" + rootTag + ">" + tagList.substr(start+1,tagList.size()-start-2) + "</" + rootTag + ">" + "\n";
+        out += std::string(level, '\t') + "<" + rootTag + ">" + tagList.substr(start+1,tagList.size()-start-2) + "</" + rootTag + ">" + "\n";
     return out;
 }
 
@@ -171,8 +171,8 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
         	return parsed + parseJson(jsonString, nextBracket+1, tmpEnd, level);
         } else {
         	// The list only contain single elements
-			std::string subtags = getSubTags(tag, jsonString.substr(next+1, nextBracket-next-1));
-			return std::string(level, '\t') + subtags + parseJson(jsonString, contPos, tmpEnd, level);
+			std::string subtags = getSubTags(tag, jsonString.substr(next+1, nextBracket-next-1), level);
+			return subtags + parseJson(jsonString, contPos, tmpEnd, level);
         }
     } else {
         std::string value;

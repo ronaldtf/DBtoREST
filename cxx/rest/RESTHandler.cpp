@@ -67,13 +67,13 @@ void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> sessio
 			std::vector<std::string> databases;
 			getDBs(databases);
 			std::string body;
-			rest::JsonGenerator::getJson("databases", databases, body);
+			rest::JsonGenerator::getJson("database", databases, body);
 
 			restbed::Response response;
 			if (format == JSON)
 				getResponse(restbed::OK, body, response);
 			else
-				getResponse(restbed::OK, rest::JsonToXml::json2xml(body, "database"), response);
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body, "databases"), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
@@ -104,7 +104,7 @@ void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session,
 			getTables(db, tables);
 			std::string body;
 
-			rest::JsonGenerator::getJson("tables", tables, body);
+			rest::JsonGenerator::getJson("table", tables, body);
 
 			restbed::Response response;
 			if (format == JSON)
