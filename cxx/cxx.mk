@@ -9,6 +9,7 @@ all:
 	g++ $(FLAGS) -o db/table/Column.o -c db/table/Column.cpp
 	g++ $(FLAGS) $(EXTRA_INC) -o rest/RESTHandler.o -c rest/RESTHandler.cpp 
 	g++ $(FLAGS) $(EXTRA_INC) -o rest/JsonGenerator.o -c rest/JsonGenerator.cpp
-	g++ $(FLAGS) $(LDFLAGS) $(CPPFLAGS) $(EXTRA_INC) $(EXTRA_LIB) -o rest/Server db/table/Column.o db/DBConnectionPool.o db/DBConnector.o utils/Utils.o rest/RESTHandler.o rest/JsonGenerator.o rest/Server.cpp
+	g++ $(FLAGS) $(EXTRA_INC) -o rest/JsonToXml.o -c rest/JsonToXml.cpp
+	g++ $(FLAGS) $(LDFLAGS) $(CPPFLAGS) $(EXTRA_INC) $(EXTRA_LIB) -o rest/Server db/table/Column.o db/DBConnectionPool.o db/DBConnector.o utils/Utils.o rest/RESTHandler.o rest/JsonGenerator.o rest/JsonToXml.o rest/Server.cpp
 clean:
 	rm -rf rest/Server */*.o */*/*.o

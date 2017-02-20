@@ -14,6 +14,7 @@
 #include "../utils/Utils.h"
 
 #include "JsonGenerator.h"
+#include "JsonToXml.h"
 #include "RESTHandler.h"
 
 namespace rest {
@@ -41,7 +42,7 @@ void RESTHandler::getSingleTable(const std::string dbName, const std::string tab
     connectionPool->pushConnection(connection);
 }
 
-void RESTHandler::getResponse(int responseCode, std::string& body, restbed::Response& response) {
+void RESTHandler::getResponse(int responseCode, const std::string& body, restbed::Response& response) {
 	response.add_header("Access-Control-Allow-Origin", "*");
 	response.add_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 	response.add_header("Access-Control-Max-Age", "3600");
@@ -52,7 +53,15 @@ void RESTHandler::getResponse(int responseCode, std::string& body, restbed::Resp
 	response.add_header("Connection", "close");
 }
 
-void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> session) {
+void RESTHandler::databaseHandlerJson(const std::shared_ptr<restbed::Session> session) {
+	databaseHandler(session, JSON);
+}
+
+void RESTHandler::databaseHandlerXml(const std::shared_ptr<restbed::Session> session) {
+	databaseHandler(session, XML);
+}
+
+void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
 	if (session->is_open()) {
 		try {
 			std::vector<std::string> databases;
@@ -61,7 +70,10 @@ void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> sessio
 			rest::JsonGenerator::getJson("databases", databases, body);
 
 			restbed::Response response;
-			getResponse(restbed::OK, body, response);
+			if (format == JSON)
+				getResponse(restbed::OK, body, response);
+			else
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
@@ -73,7 +85,15 @@ void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> sessio
 	}
 }
 
-void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session) {
+void RESTHandler::tablesHandlerJson(const std::shared_ptr<restbed::Session> session) {
+	tablesHandler(session, JSON);
+}
+
+void RESTHandler::tablesHandlerXml(const std::shared_ptr<restbed::Session> session) {
+	tablesHandler(session, XML);
+}
+
+void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
 	if (session->is_open()) {
 		try {
 			std::string db;
@@ -87,7 +107,10 @@ void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session)
 			rest::JsonGenerator::getJson("tables", tables, body);
 
 			restbed::Response response;
-			getResponse(restbed::OK, body, response);
+			if (format == JSON)
+				getResponse(restbed::OK, body, response);
+			else
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
@@ -99,7 +122,15 @@ void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session)
 	}
 }
 
-void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> session) {
+void RESTHandler::singleTableHandlerJson(const std::shared_ptr<restbed::Session> session) {
+	singleTableHandler(session, JSON);
+}
+
+void RESTHandler::singleTableHandlerXml(const std::shared_ptr<restbed::Session> session) {
+	singleTableHandler(session, XML);
+}
+
+void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
 	if (session->is_open()) {
 		try {
 			const std::shared_ptr<const restbed::Request> request = session->get_request();
@@ -113,7 +144,10 @@ void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> ses
 			rest::JsonGenerator::getJson(tableName, table, body);
 
 			restbed::Response response;
-			getResponse(restbed::OK, body, response);
+			if (format == JSON)
+				getResponse(restbed::OK, body, response);
+			else
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
