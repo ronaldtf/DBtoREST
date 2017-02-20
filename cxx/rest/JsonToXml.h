@@ -18,7 +18,7 @@ private:
 	static std::string getSubTags(std::string rootTag, std::string tagList);
 	static std::string parseJson(const std::string& jsonString, size_t start, size_t end, int level = 0);
 public:
-	static std::string json2xml(const std::string& jsonString);
+	static std::string json2xml(const std::string& jsonString, const std::string rootTag);
 };
 
 } /* namespace rest */

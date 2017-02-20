@@ -81,9 +81,10 @@ std::string JsonToXml::getSubTags(std::string rootTag, std::string tagList) {
     return out;
 }
 
-std::string JsonToXml::json2xml(const std::string& jsonString) {
+std::string JsonToXml::json2xml(const std::string& jsonString, const std::string rootTag) {
 	std::string copy = convertToOneLine(jsonString);
-	return parseJson(copy, 0, copy.size(), 0);
+	std::string header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n";
+	return header + "<" + rootTag + ">\n" + parseJson(copy, 0, copy.size(), 1) + "</" + rootTag + ">\n";
 }
 
 std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, size_t end, int level) {
@@ -162,7 +163,7 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
         		if (endCurlyBracket == std::string::npos) {
         			throw std::exception();
         		}
-        		parsed += std::string(level,'\t') + "<" + tag + ">\n" + parseJson(jsonString, curlyBracket, endCurlyBracket+1, level+1) + "</" + tag + ">\n";
+        		parsed += std::string(level,'\t') + "<" + tag + ">\n" + parseJson(jsonString, curlyBracket, endCurlyBracket+1, level+1) + std::string(level, '\t') + "</" + tag + ">\n";
         		curlyBracket = jsonString.find_first_not_of(' ', endCurlyBracket+1);
         		if (curlyBracket != std::string::npos && jsonString.at(curlyBracket) == ',')
         			curlyBracket = jsonString.find_first_not_of(' ', curlyBracket+1);
@@ -171,7 +172,7 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
         } else {
         	// The list only contain single elements
 			std::string subtags = getSubTags(tag, jsonString.substr(next+1, nextBracket-next-1));
-			return subtags + parseJson(jsonString, contPos, tmpEnd, level);
+			return std::string(level, '\t') + subtags + parseJson(jsonString, contPos, tmpEnd, level);
         }
     } else {
         std::string value;

@@ -73,7 +73,7 @@ void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> sessio
 			if (format == JSON)
 				getResponse(restbed::OK, body, response);
 			else
-				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body, "database"), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
@@ -110,7 +110,7 @@ void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session,
 			if (format == JSON)
 				getResponse(restbed::OK, body, response);
 			else
-				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body, "tables"), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
@@ -147,7 +147,7 @@ void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> ses
 			if (format == JSON)
 				getResponse(restbed::OK, body, response);
 			else
-				getResponse(restbed::OK, rest::JsonToXml::json2xml(body), response);
+				getResponse(restbed::OK, rest::JsonToXml::json2xml(body, "table"), response);
 			session->close(response);
 		} catch (...) {
 			std::cerr << "Internal server error" << std::endl;
