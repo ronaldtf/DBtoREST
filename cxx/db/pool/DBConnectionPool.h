@@ -7,9 +7,6 @@
 #ifndef CXX_DB_DBCONNECTIONPOOL_H_
 #define CXX_DB_DBCONNECTIONPOOL_H_
 
-#include <mysql_connection.h>
-#include <cppconn/driver.h>
-
 #include <condition_variable>
 #include <deque>
 #include <exception>
@@ -18,27 +15,14 @@
 #include <mutex>
 #include <thread>
 
+#include "../connection/DBConnection.hpp"
+
 namespace db {
-
-class MaxNoConnectionsException : public std::exception {
-private:
-	std::string _message;
-public:
-	MaxNoConnectionsException(const std::string& message) : _message(message) {
-	};
-
-	const char* what() const throw() {
-		return _message.c_str();
-	};
-
-	virtual ~MaxNoConnectionsException() throw() {};
-};
 
 class ConnectionPool {
 private:
-	sql::Driver* _driver;
 	std::map<std::string, std::string> _properties;
-	std::deque<std::shared_ptr<sql::Connection> > _pool;
+	std::deque<std::shared_ptr<db::DBConnection> > _pool;
 
 	static std::shared_ptr<ConnectionPool> _instance;
 	static std::mutex _creationMutex; // This mutex is used to prevent multiple instances being created
@@ -53,8 +37,8 @@ public:
 	virtual ~ConnectionPool();
 	static std::shared_ptr<ConnectionPool> getInstance();
 
-	std::shared_ptr<sql::Connection> popConnection();
-	void pushConnection(std::shared_ptr<sql::Connection> connection);
+	std::shared_ptr<db::DBConnection> popConnection();
+	void pushConnection(std::shared_ptr<db::DBConnection> connection);
 };
 
 } /* namespace account */

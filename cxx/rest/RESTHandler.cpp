@@ -8,39 +8,17 @@
 #include <fstream>
 #include <iostream>
 
-#include "../db/DBConnectionPool.h"
-#include "../db/DBConnector.h"
+#include "../db/pool/DBConnectionPool.h"
+#include "../db/connection/DBConnection.hpp"
 #include "../db/table/Column.h"
 #include "../utils/Utils.h"
 
 #include "JsonGenerator.h"
 #include "JsonToXml.h"
 #include "RESTHandler.h"
+#include "../db/connection/DBExecutor.h"
 
 namespace rest {
-
-void RESTHandler::getDBs(std::vector<std::string>& v) {
-    std::vector<std::string> dbs;
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
-    std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
-    db::DBConnector::getDBs(connection.get(), v);
-    connectionPool->pushConnection(connection);
-}
-
-
-void RESTHandler::getTables(const std::string dbName, std::vector<std::string>& tables) {
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
-    std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
-    db::DBConnector::getTables(connection.get(), dbName, tables);
-    connectionPool->pushConnection(connection);
-}
-
-void RESTHandler::getSingleTable(const std::string dbName, const std::string tableName, std::shared_ptr<db::table::Column>& table) {
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
-    std::shared_ptr<sql::Connection> connection = connectionPool->popConnection();
-    db::DBConnector::getTableInfo(connection.get(), dbName, tableName, table);
-    connectionPool->pushConnection(connection);
-}
 
 void RESTHandler::getResponse(int responseCode, const std::string& body, restbed::Response& response) {
 	response.add_header("Access-Control-Allow-Origin", "*");
@@ -65,7 +43,7 @@ void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> sessio
 	if (session->is_open()) {
 		try {
 			std::vector<std::string> databases;
-			getDBs(databases);
+			db::DBExecutor::getDBs(databases);
 			std::string body;
 			rest::JsonGenerator::getJson("database", databases, body);
 
@@ -101,7 +79,7 @@ void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session,
 			db = request->get_path_parameter("dbname", "/");
 
 			std::vector<std::string> tables;
-			getTables(db, tables);
+			db::DBExecutor::getTables(db, tables);
 			std::string body;
 
 			rest::JsonGenerator::getJson("table", tables, body);
@@ -138,7 +116,7 @@ void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> ses
 			const std::string tableName = request->get_path_parameter("tablename", "/");
 
 			std::shared_ptr<db::table::Column> table;
-			getSingleTable(dbName, tableName, table);
+			db::DBExecutor::getTableInfo(dbName, tableName, table);
 
 			std::string body;
 			rest::JsonGenerator::getJson(tableName, table, body);

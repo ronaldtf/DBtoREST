@@ -6,9 +6,12 @@
 
 #include "DBConnectionPool.h"
 
-#include "../utils/Utils.h"
 #include <exception>
 #include <functional>
+
+#include "../connection/DBConnectionAdapter.h"
+#include "../../exception/DBException.hpp"
+#include "../../utils/Utils.h"
 
 namespace db {
 
@@ -24,7 +27,6 @@ ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMut
 		std::cerr << "WARN: Could not get ip from host <" << hostIp << ">. Set to <localhost> (127.0.0.1)" << std::endl;
 		hostIp = "127.0.0.1";
 	}
-	_driver = get_driver_instance();
 	std::string host = std::string("tcp://" + hostIp + ":" + _properties.at("dbport"));
 	std::string user = _properties.at("username");
 	std::string pass = _properties.at("password");
@@ -37,15 +39,16 @@ ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMut
 		MAX_CONNECTIONS = max_conn;
 		std::cout << "[INFO] " << "Using a pool of " << MAX_CONNECTIONS << " connections..." << std::endl;
 	}
-
 	try {
 		for (unsigned int i=0; i<MAX_CONNECTIONS; ++i)
-			_pool.push_back(std::shared_ptr<sql::Connection>(_driver->connect(host.c_str(), user.c_str(), pass.c_str())));
-	} catch (sql::SQLException& e) {
-		if ( e.getErrorCode() == 2026 ) // Max No. of connections exceeded
-			throw db::MaxNoConnectionsException("Max number of connections exceeded");
-		else
-			throw e;
+			_pool.push_back(std::shared_ptr<db::DBConnection>(new db::DBConnectionAdapter(host.c_str(), user.c_str(), pass.c_str())));
+	} catch (exception::DBException& e) {
+		// Max No. of connections exceeded
+		std::cerr << e.getMessage() << std::endl;
+		throw e;
+	} catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+		throw e;
 	}
 }
 
@@ -63,19 +66,19 @@ std::shared_ptr<ConnectionPool> ConnectionPool::getInstance() {
 	return _instance;
 }
 
-std::shared_ptr<sql::Connection> ConnectionPool::popConnection() {
+std::shared_ptr<db::DBConnection> ConnectionPool::popConnection() {
 	std::unique_lock<std::mutex> locker(_popMutex);
 
 	if (_pool.empty()) {
 		_cv.wait(locker, [&](){return _pool.empty();});
 	}
 
-	std::shared_ptr<sql::Connection> element = _pool.front();
+	std::shared_ptr<db::DBConnection> element = _pool.front();
 	_pool.pop_front();
 	return element;
 }
 
-void ConnectionPool::pushConnection(std::shared_ptr<sql::Connection> connection) {
+void ConnectionPool::pushConnection(std::shared_ptr<db::DBConnection> connection) {
 	std::unique_lock<std::mutex> locker(_pushMutex);
 
 	// This should never happen. However, we must find a solution to prevent this

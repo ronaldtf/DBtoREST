@@ -5,6 +5,7 @@
  */
 
 #include "JsonToXml.h"
+#include "../exception/ParseException.hpp"
 
 namespace rest {
 
@@ -56,13 +57,13 @@ std::string JsonToXml::convertToOneLine(const std::string& s) {
 
 size_t JsonToXml::searchTag(const std::string& json, const size_t start, const size_t end, std::string& tag) {
     if (start >= json.size() || end >= json.size())
-        throw std::exception();
+        throw exception::ParseException("Invalid start/end");
     size_t startTagPos = json.find_first_not_of(' ', start);
     if (startTagPos == std::string::npos)
-        throw std::exception();
+        throw exception::ParseException("Invalid json format");
     size_t endTagPos = json.find_first_of("\"", startTagPos + 1);
     if (endTagPos == std::string::npos)
-        throw std::exception();
+        throw exception::ParseException("Invalid json format");
     tag = json.substr(startTagPos+1, endTagPos-startTagPos-1);
     return endTagPos;
 }
@@ -91,13 +92,13 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
     if (start >= end)
         return "";
     if (start == 0 && jsonString.at(start) != '{' && jsonString.at(end-1) != '}')
-        throw std::exception();
+        throw exception::ParseException("Invalid json format");
     size_t tmpStart = start;
     size_t tmpEnd = end;
     if (jsonString.at(start) == '{' ) {
         size_t p = jsonString.find_last_not_of(' ',end-1);
         if (jsonString.at(p) != '}') {
-            throw std::exception();
+            throw exception::ParseException("Invalid json format (curly bracket not closed)");
         }
         ++tmpStart;
         tmpEnd = p-1;
@@ -109,7 +110,7 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
     size_t aux1 = jsonString.find_first_not_of(' ', endTagPos+1);
     size_t aux2 = jsonString.find_first_of(':', endTagPos+1);
     if (aux1 != aux2) {
-        throw std::exception();
+        throw exception::ParseException("Invalid json format");
     }
     size_t next = jsonString.find_first_not_of(' ', aux1+1);
     if (jsonString.at(next) == '{') {
@@ -128,7 +129,7 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
             size_t n = jsonString.find_last_of('}',tmpEnd);
             size_t n2 = jsonString.find_first_not_of(' ',n+1);
             if (n2 == std::string::npos)
-                throw std::exception();
+                throw exception::ParseException("Invalid json format");
             if (jsonString.at(n2) == ',')
                 ++n2;
             return std::string(level, '\t') + "<" + tag + ">\n" + parseJson(jsonString, next, n+1, level+1) + std::string(level, '\t') + "</" + tag + ">\n" + parseJson(jsonString, n2, tmpEnd, level);
@@ -138,7 +139,7 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
     } else if (jsonString.at(next) == '[') {
         size_t nextBracket = jsonString.find_first_of(']', next);
         if (nextBracket == std::string::npos)
-            throw std::exception();
+            throw exception::ParseException("Invalid json format (bracket not closed)");;
         // Check it is not empty
         size_t notEmpty = jsonString.find_first_not_of(' ', next+1);
         if (notEmpty == nextBracket) {
@@ -157,11 +158,11 @@ std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, si
         	std::string parsed;
         	while (curlyBracket < nextBracket) {
         		if (jsonString.at(curlyBracket) != '{') {
-        			throw std::exception();
+        			throw exception::ParseException("Invalid json format (curly brackets problem)");
         		}
         		size_t endCurlyBracket = jsonString.find_first_of('}', curlyBracket+1);
         		if (endCurlyBracket == std::string::npos) {
-        			throw std::exception();
+        			throw exception::ParseException("Invalid json format (curly brackets problem)");;
         		}
         		parsed += std::string(level,'\t') + "<" + tag + ">\n" + parseJson(jsonString, curlyBracket, endCurlyBracket+1, level+1) + std::string(level, '\t') + "</" + tag + ">\n";
         		curlyBracket = jsonString.find_first_not_of(' ', endCurlyBracket+1);
