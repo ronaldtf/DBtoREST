@@ -28,7 +28,7 @@ DBConnectionAdapter::DBConnectionAdapter(std::string host, std::string user, std
 	}
 }
 
-void DBConnectionAdapter::getList(const std::string query, std::vector<std::string>& result, const std::string db) {
+void DBConnectionAdapter::getList(const std::string query, std::vector<std::string>& result, const std::string db) const {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 	try {
@@ -48,7 +48,7 @@ void DBConnectionAdapter::getList(const std::string query, std::vector<std::stri
 	}
 }
 
-void DBConnectionAdapter::getTable(const std::string db, const std::string tableName, std::shared_ptr<db::table::Column>& output) {
+void DBConnectionAdapter::getTable(const std::string db, const std::string tableName, std::shared_ptr<db::table::Column>& output) const {
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 
@@ -92,8 +92,15 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 	}
 }
 
-DBConnectionAdapter::~DBConnectionAdapter() {
+void DBConnectionAdapter::getSystemDBs(std::map<std::string, bool>& systemDBs) const {
+	systemDBs = std::map<std::string, bool>();
+	systemDBs.insert(std::make_pair<std::string, bool>("information_schema", true));
+	systemDBs.insert(std::make_pair<std::string, bool>("mysql", true));
+	systemDBs.insert(std::make_pair<std::string, bool>("performance_schema", true));
+	systemDBs.insert(std::make_pair<std::string, bool>("sys", true));
+}
 
+DBConnectionAdapter::~DBConnectionAdapter() {
 }
 
 } /* namespace db */

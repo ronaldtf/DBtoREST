@@ -16,15 +16,12 @@ DBExecutor::DBExecutor() {
 
 void DBExecutor::getDBs(std::vector<std::string>& databases) {
 
-	// Exclude all databases which are from the system (mysql)
-	std::map<const std::string, bool> excludedDBs = std::map<const std::string, bool>();
-	excludedDBs.insert(std::make_pair<std::string, bool>("information_schema", true));
-	excludedDBs.insert(std::make_pair<std::string, bool>("mysql", true));
-	excludedDBs.insert(std::make_pair<std::string, bool>("performance_schema", true));
-	excludedDBs.insert(std::make_pair<std::string, bool>("sys", true));
-
     std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
     std::shared_ptr<db::DBConnection> connection = connectionPool->popConnection();
+
+	// Exclude all databases which are from the system (mysql)
+	std::map<std::string, bool> excludedDBs;
+	connection->getSystemDBs(excludedDBs);
 
     connection->getList("SHOW DATABASES", databases);
 

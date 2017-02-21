@@ -7,6 +7,7 @@
 #ifndef CXX_DB_CONNECTION_DBCONNECTIONADAPTER_H_
 #define CXX_DB_CONNECTION_DBCONNECTIONADAPTER_H_
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -23,8 +24,9 @@ private:
 	sql::Connection* _connection;
 public:
 	DBConnectionAdapter(std::string host, std::string user, std::string pass);
-	void getTable(const std::string db, const std::string tableName, std::shared_ptr<db::table::Column>& output);
-	void getList(const std::string query, std::vector<std::string>& result, const std::string db="");
+	void getTable(const std::string db, const std::string tableName, std::shared_ptr<db::table::Column>& output) const;
+	void getList(const std::string query, std::vector<std::string>& result, const std::string db="") const;
+	void getSystemDBs(std::map<std::string, bool>& systemDBs) const;
 	virtual ~DBConnectionAdapter();
 };
 
