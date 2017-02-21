@@ -28,9 +28,11 @@ void DBExecutor::getDBs(std::vector<std::string>& databases) {
 
     connection->getList("SHOW DATABASES", databases);
 
-    for (std::vector<std::string>::const_iterator it = databases.begin(); it != databases.end(); ++it) {
+    for (std::vector<std::string>::const_iterator it = databases.begin(); it != databases.end(); ) {
     	if (excludedDBs.find(*it) != excludedDBs.end())
-    		databases.erase(it);
+    		it = databases.erase(it);
+    	else
+    		++it;
     }
 
 	connectionPool->pushConnection(connection);
