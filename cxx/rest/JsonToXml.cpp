@@ -69,16 +69,25 @@ size_t JsonToXml::searchTag(const std::string& json, const size_t start, const s
 }
 
 std::string JsonToXml::getSubTags(const std::string rootTag, const std::string tagList, const int level) {
-    size_t start = 0;
+    size_t start = tagList.find_first_not_of(' ',0);
+    if (start == std::string::npos){
+    	return "";
+    }
     // utils::Utils::trim(tagList)
     std::string out = "";
     size_t endPos = 0;
     while ((endPos = tagList.find_first_of(',', start)) != std::string::npos) {
+    	if (tagList.at(start) != '"' || tagList.at(endPos-1) != '"')
+    		throw exception::ParseException("Invalid json format: no quotes defined");
         out += std::string(level, '\t') + "<" + rootTag + ">" + tagList.substr(start+1,endPos-start-2) + "</" + rootTag + ">" + "\n";
-        start=endPos+1;
+        start= tagList.find_first_not_of(' ',endPos+1);
     }
-    if (start < tagList.size())
-        out += std::string(level, '\t') + "<" + rootTag + ">" + tagList.substr(start+1,tagList.size()-start-2) + "</" + rootTag + ">" + "\n";
+    if (start < tagList.size()) {
+    	endPos = tagList.find_last_not_of(' ', tagList.size());
+    	if (endPos == std::string::npos || tagList.at(endPos) != '"')
+    		throw exception::ParseException("Invalid json format: quotes are not correctly defined");
+        out += std::string(level, '\t') + "<" + rootTag + ">" + tagList.substr(start+1,endPos-start-1) + "</" + rootTag + ">" + "\n";
+    }
     return out;
 }
 
