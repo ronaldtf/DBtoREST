@@ -19,7 +19,7 @@ void DBExecutor::getDBs(std::vector<std::string>& databases) {
     std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
     std::shared_ptr<db::DBConnection> connection = connectionPool->popConnection();
 
-	// Exclude all databases which are from the system (mysql)
+	// Exclude all databases which are from the system
 	std::map<std::string, bool> excludedDBs;
 	connection->getSystemDBs(excludedDBs);
 
