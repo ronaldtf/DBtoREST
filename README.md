@@ -13,23 +13,23 @@ Below I show briefly the main implementation details:
 
 * Database: 
 
-- Connection Pool: This pool of connections has been defined in order to not exceed the maximum number of connections to the database. In this case, the class <code>DBConnectionPool</code> implements the Object Pool and Singleton design patterns.
+  - Connection Pool: This pool of connections has been defined in order to not exceed the maximum number of connections to the database. In this case, the class <code>DBConnectionPool</code> implements the Object Pool and Singleton design patterns.
 
-- MySQL Adapter: Although in this project I have used a MySQL database, I made an extensible implementation by using the Adapter design pattern (<code>DBConnectionAdapter</code>). This way, in case we need to use a different database (e.g. Oracle), we simply need to create another adapter class that extends from the <code>DBConnection</code> class and call it in the <code>DBConnectionPool</code> instead of the existing one. <code>DBExecutor</code> is a class that mainly delegates its functionality in the Adapter.
+  - MySQL Adapter: Although in this project I have used a MySQL database, I made an extensible implementation by using the Adapter design pattern (<code>DBConnectionAdapter</code>). This way, in case we need to use a different database (e.g. Oracle), we simply need to create another adapter class that extends from the <code>DBConnection</code> class and call it in the <code>DBConnectionPool</code> instead of the existing one. <code>DBExecutor</code> is a class that mainly delegates its functionality in the Adapter.
 
-- Dynamic Tables: A priori we do not know what are the contents of any table in the database. Therefore, we need a dynamic mechanism in order to save the contents of the table into a class. the <code>Column</code> class provides a mechanism to save all the rows and columns of a table, regardless of the size and number of columns of the table.
+  - Dynamic Tables: A priori we do not know what are the contents of any table in the database. Therefore, we need a dynamic mechanism in order to save the contents of the table into a class. the <code>Column</code> class provides a mechanism to save all the rows and columns of a table, regardless of the size and number of columns of the table.
 
 * Service: 
 
-- REST: A RESTful service has been implemented as a way to interact with the system. The <code>Server</code> class implements the service and the REST handlers are implemented in the <code>RESTHandler</code> class.
+  - REST: A RESTful service has been implemented as a way to interact with the system. The <code>Server</code> class implements the service and the REST handlers are implemented in the <code>RESTHandler</code> class.
 
-- JSON/XML: It is possible to provide the information to the user through the REST interface in two different formats: JSON and XML. Using one or the other depends on the request. In any case, although format changes, the data displayed is the same for both cases. <code>JsonGenerator</code> formats the data in the JSON style. In <code>JsonToXml</code> class, data in JSON format is converted to XML. Note that, although we could have used a library to do the conversion from JSON to XML, I opted here to implement my own converter because I have not found any "standard" one. Although the JSON to XML converter implemented works quite well, it has the limitation that multiple spaces are not allowed and are converted to a single space (this limitation should not be a problem).
+  - JSON/XML: It is possible to provide the information to the user through the REST interface in two different formats: JSON and XML. Using one or the other depends on the request. In any case, although format changes, the data displayed is the same for both cases. <code>JsonGenerator</code> formats the data in the JSON style. In <code>JsonToXml</code> class, data in JSON format is converted to XML. Note that, although we could have used a library to do the conversion from JSON to XML, I opted here to implement my own converter because I have not found any "standard" one. Although the JSON to XML converter implemented works quite well, it has the limitation that multiple spaces are not allowed and are converted to a single space (this limitation should not be a problem).
 
 * Configuration:
 
-- DB: A properties file with the parameters to get connected to the database has been defined. This avoids to recompile the project when changing the settings.
+  - DB: A properties file with the parameters to get connected to the database has been defined. This avoids to recompile the project when changing the settings.
 
-- REST: Host name and port of the REST service which is being created is defined in a properties file. This avoids to recompile the project when changing the settings.
+  - REST: Host name and port of the REST service which is being created is defined in a properties file. This avoids to recompile the project when changing the settings.
 
 
 ## Requirements
