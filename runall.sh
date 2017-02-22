@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script starts the applications needed to run the project
+
 ERROR=0
 
 if test `ps -ef | grep -v grep | grep mysqld | wc -l` -ne 0; then
@@ -9,6 +11,7 @@ else
 	mysqld &
 	if [ $? -ne 0 ]; then
 		echo "ERROR: A problem occurred when trying to start MySQL server"
+		echo "       Please verify mysql settings and retry again"
 		ERROR=1
 	fi
 fi

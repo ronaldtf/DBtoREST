@@ -49,4 +49,28 @@ The project has been created in C++ an using a set of libraries. The set of libr
 
 ## Compilation and Execution
 
+1. To compile the project simply run:
 
+````bash
+make
+````
+
+2. To generate the doxygen documentation, run:
+
+ ````bash
+ make doc
+ ````
+ 
+ 3. To run simply the service without starting the rest of applications, run:
+ 
+ ````bash
+ make exec
+ ````
+ 
+ 4. To run the application together with the required applications (i.e. to make the service work) run:
+ 
+ ````bash
+ make runall
+ ````
+ 
+ By default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000>
