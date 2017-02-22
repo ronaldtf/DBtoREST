@@ -21,5 +21,9 @@ all:
 							rest/JsonToXml.o \
 							rest/Server.cpp \
 							utils/Utils.o
+doxygen:
+	doxygen conf/doxygen.conf
 clean:
 	rm -rf rest/Server */*.o */*/*.o
+run: all
+	./rest/Server

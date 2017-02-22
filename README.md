@@ -47,4 +47,6 @@ The project has been created in C++ an using a set of libraries. The set of libr
 
 6. http-server (optional) (<https://www.npmjs.com/package/http-server>): This application provides a generic web service (used together with swagger-ui).
 
+## Compilation and Execution
+
 

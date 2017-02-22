@@ -4,6 +4,6 @@
 Debug
 */Debug
 *.class
-doc/
+doc/*
 **/Server
 swagger/swagger
