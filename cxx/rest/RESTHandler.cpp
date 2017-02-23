@@ -10,24 +10,27 @@
 
 #include "../db/pool/DBConnectionPool.h"
 #include "../db/connection/DBConnection.hpp"
+#include "../db/connection/DBExecutor.h"
 #include "../db/table/Column.h"
 #include "../utils/Utils.h"
 
 #include "JsonGenerator.h"
 #include "JsonToXml.h"
 #include "RESTHandler.h"
-#include "../db/connection/DBExecutor.h"
 
 namespace rest {
 
-void RESTHandler::getResponse(int responseCode, const std::string& body, restbed::Response& response) {
+void RESTHandler::getResponse(const int responseCode, const std::string& body, restbed::Response& response) {
+	// Set response headers
 	response.add_header("Access-Control-Allow-Origin", "*");
 	response.add_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 	response.add_header("Access-Control-Max-Age", "3600");
 	response.add_header("Access-Control-Allow-Headers", "x-requested-with");
-
+	// Set response code
 	response.set_status_code(responseCode);
+	// Set body
 	response.set_body(body);
+
 	response.add_header("Connection", "close");
 }
 
@@ -39,7 +42,7 @@ void RESTHandler::databaseHandlerXml(const std::shared_ptr<restbed::Session> ses
 	databaseHandler(session, XML);
 }
 
-void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
+void RESTHandler::databaseHandler(const std::shared_ptr<restbed::Session> session, const formatType format) {
 	if (session->is_open()) {
 		try {
 			std::vector<std::string> databases;
@@ -71,7 +74,7 @@ void RESTHandler::tablesHandlerXml(const std::shared_ptr<restbed::Session> sessi
 	tablesHandler(session, XML);
 }
 
-void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
+void RESTHandler::tablesHandler(const std::shared_ptr<restbed::Session> session, const formatType format) {
 	if (session->is_open()) {
 		try {
 			std::string db;
@@ -108,7 +111,7 @@ void RESTHandler::singleTableHandlerXml(const std::shared_ptr<restbed::Session> 
 	singleTableHandler(session, XML);
 }
 
-void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> session, formatType format) {
+void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> session, const formatType format) {
 	if (session->is_open()) {
 		try {
 			const std::shared_ptr<const restbed::Request> request = session->get_request();
@@ -151,7 +154,7 @@ void RESTHandler::swaggerJson(const std::shared_ptr<restbed::Session> session) {
 		body += tmpStr + " ";
 	}
 	ifstr.close();
-	session->set_headers({{"Access-Control-Allow-Methods", "PST,GET,OPTIONS,PUT"},{"Access-Control-Allow-Origin", "*"}});
+	session->set_headers({{"Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT"},{"Access-Control-Allow-Origin", "*"}});
 	session->close(restbed::OK, body, { {"Connection", "close"} });
 }
 

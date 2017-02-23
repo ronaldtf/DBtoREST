@@ -18,7 +18,9 @@ const std::string Utils::DB_CONF = "conf/db.properties";
 const std::string Utils::REST_CONF = "conf/rest.properties";
 
 void Utils::trim(std::string &s) {
+	// Remove spaces at the beginning of the string
 	s.erase(s.begin(),  std::find_if(s.begin(),  s.end(),  std::not1(std::ptr_fun<int,int>(std::isspace))));
+	// Remove spaces at the end of the string
 	s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int,int>(std::isspace))).base(), s.end());
 };
 
@@ -68,7 +70,7 @@ void Utils::getRESTProperties(std::map<std::string, std::string>& properties) {
 	parseFile(REST_CONF, properties);
 }
 
-std::string Utils::getIpAddress(std::string hostname) {
+std::string Utils::getIpAddress(const std::string hostname) {
 	struct hostent* hostEnt = gethostbyname(hostname.c_str());
 	if (hostEnt == NULL) {
 		herror("gethostbyname");
@@ -86,30 +88,6 @@ int Utils::str2int(std::string& s) {
 	} catch(...) {
 		return -1;
 	}
-}
-
-Utils::dbVarType Utils::getType(const std::string& s) {
-	std::string tmp = s;
-	std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
-
-	if (s.find("char") != std::string::npos ||
-		s.find("text") != std::string::npos ||
-		s.find("blob") != std::string::npos ||
-		s.find("enum") != std::string::npos)
-		return Utils::STRING;
-
-	if (s.find("int")     != std::string::npos ||
-		s.find("float")   != std::string::npos ||
-		s.find("double")  != std::string::npos ||
-		s.find("decimal") != std::string::npos)
-		return Utils::INT;
-
-	if (s.find("date") != std::string::npos ||
-		s.find("time") != std::string::npos ||
-		s.find("year") != std::string::npos)
-		return Utils::DATE;
-
-	return Utils::UNKNOWN;
 }
 
 } /* namespace account */

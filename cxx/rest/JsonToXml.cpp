@@ -97,7 +97,7 @@ std::string JsonToXml::json2xml(const std::string& jsonString, const std::string
 	return header + "<" + rootTag + ">\n" + parseJson(copy, 0, copy.size(), 1) + "</" + rootTag + ">\n";
 }
 
-std::string JsonToXml::parseJson(const std::string& jsonString, size_t start, size_t end, int level) {
+std::string JsonToXml::parseJson(const std::string& jsonString, const size_t start, const size_t end, int level) {
     if (start >= end)
         return "";
     if (start == 0 && jsonString.at(start) != '{' && jsonString.at(end-1) != '}')

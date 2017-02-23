@@ -1,5 +1,5 @@
 /**
- * @file ConnectionPool.cpp
+ * @file DBConnectionPool.cpp
  * @author Ronald T. Fernandez
  * @version 1.0
  */
@@ -20,8 +20,11 @@ std::shared_ptr<ConnectionPool> ConnectionPool::_instance = nullptr;
 std::mutex ConnectionPool::_creationMutex;
 
 ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMutex() {
+
+	// Get properties from the properties file
 	utils::Utils::getDBProperties(_properties);
 
+	// Initialize class attributes regarding the properties extracted from the properties file
 	std::string hostIp = utils::Utils::getIpAddress(_properties.at("dbhost"));
 	if (hostIp.empty()) {
 		std::cerr << "WARN: Could not get ip from host <" << hostIp << ">. Set to <localhost> (127.0.0.1)" << std::endl;
@@ -33,12 +36,15 @@ ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMut
 	int max_conn = utils::Utils::str2int(_properties.at("max_connections"));
 	std::cout << "Connecting to " << host << " with username <" << user << ">, pass <" << pass << ">" << std::endl;
 
+	// Set the maximum number of connections / pool size
 	if (max_conn == -1) {
 		std::cerr << "WARN: Maximum connections has not been (correctly) defined. Use the default (10)" << std::endl;
 	} else {
 		MAX_CONNECTIONS = max_conn;
 		std::cout << "[INFO] " << "Using a pool of " << MAX_CONNECTIONS << " connections..." << std::endl;
 	}
+
+	// Initialize the pool
 	try {
 		for (unsigned int i=0; i<MAX_CONNECTIONS; ++i)
 			_pool.push_back(std::shared_ptr<db::DBConnection>(new db::DBConnectionAdapter(host.c_str(), user.c_str(), pass.c_str())));
@@ -69,6 +75,7 @@ std::shared_ptr<ConnectionPool> ConnectionPool::getInstance() {
 std::shared_ptr<db::DBConnection> ConnectionPool::popConnection() {
 	std::unique_lock<std::mutex> locker(_popMutex);
 
+	// Wait for an available connection if there are no connection in the pool
 	if (_pool.empty()) {
 		_cv.wait(locker, [&](){return _pool.empty();});
 	}

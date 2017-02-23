@@ -53,5 +53,3 @@ std::shared_ptr<Column>  Column::getNeighbor() const {
 
 }
 }
-
-

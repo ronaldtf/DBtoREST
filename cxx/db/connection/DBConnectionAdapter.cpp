@@ -14,17 +14,24 @@
 
 namespace db {
 
+// Get the driver instance from the MySQL connector
 sql::Driver* DBConnectionAdapter::_driver = get_driver_instance();
 
-DBConnectionAdapter::DBConnectionAdapter(std::string host, std::string user, std::string pass) : DBConnection(host, user, pass) {
+DBConnectionAdapter::DBConnectionAdapter(std::string address, std::string user, std::string pass) : DBConnection(address, user, pass) {
 	try {
-		_connection = _driver->connect(host, user, pass);
+		// Get the connection
+		_connection = _driver->connect(address, user, pass);
 	} catch (sql::SQLException& e) {
-		if ( e.getErrorCode() == 2026 ) // Max No. of connections exceeded
+		// When the maximum number of connections is exceeded, an exception with error code 2026
+		// is thrown
+		if ( e.getErrorCode() == 2026 ) {
+			std::cerr << "Maximum number of connections exceeded (" << e.what() << ")" << std::endl;
 			throw exception::DBException("Max number of connections exceeded", e.getErrorCode());
-		else
-			throw std::exception();
-
+		} else {
+			std::cerr << e.what() << std::endl;
+			// A different problem has occurred
+			throw exception::DBException(e.what());
+		}
 	}
 }
 
@@ -32,13 +39,17 @@ void DBConnectionAdapter::getList(const std::string query, std::vector<std::stri
 	std::auto_ptr<sql::Statement> statement;
 	std::auto_ptr<sql::ResultSet> resultSet;
 	try {
+		// If the database has been defined, we set it
 		if (!db.empty())
 		_connection->setSchema(db);
 
+		// Create the statement and run the query
 		statement.reset(_connection->createStatement());
 		resultSet.reset(statement->executeQuery(query));
+
+		// Retrieve the results
 		while (resultSet->next()) {
-			// Get the unique column (offset starts in 1 - not in 0 as C++
+			// Get the unique column (offset starts in 1 - not in 0 as C++)
 			const std::string tableName = resultSet->getString(1);
 			result.push_back(tableName);
 		}
@@ -53,9 +64,13 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 	std::auto_ptr<sql::ResultSet> resultSet;
 
 	try {
+		// If the database has been defined, we set it
 		if (!db.empty())
 			_connection->setSchema(db);
 
+		// First, we need to get the structure of the table
+		// We request to the database how is the structure of the database and initialize
+		// the output.
 		statement.reset(_connection->createStatement());
 		resultSet.reset(statement->executeQuery("DESC " + tableName));
 
@@ -75,9 +90,9 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 			++numColumns;
 		}
 
+		// Then, we fill the output structure with the table contents
 		statement.reset(_connection->createStatement());
 		resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
-
 		while (resultSet->next()) {
 			neighbor = output.get();
 			for (size_t i = 1; i<=numColumns; ++i) {
@@ -85,7 +100,6 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 				neighbor = neighbor->getNeighbor().get();
 			}
 		}
-
 	} catch (sql::SQLException& e) {
 		std::cerr << e.what() << std::endl;
 		throw exception::DBException(e.what(), e.getErrorCode());
@@ -93,6 +107,7 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 }
 
 void DBConnectionAdapter::getSystemDBs(std::map<std::string, bool>& systemDBs) const {
+	// We exclude those databases which are from the system
 	systemDBs = std::map<std::string, bool>();
 	systemDBs.insert(std::make_pair<std::string, bool>("information_schema", true));
 	systemDBs.insert(std::make_pair<std::string, bool>("mysql", true));

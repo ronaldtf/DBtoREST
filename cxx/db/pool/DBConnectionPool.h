@@ -1,5 +1,5 @@
 /**
- * @file ConnectionPool.h
+ * @file DBConnectionPool.h
  * @author Ronald T. Fernandez
  * @version 1.0
  */
@@ -19,25 +19,76 @@
 
 namespace db {
 
+/**
+ * This class defines a pool of database connections
+ * It implements the Object Pool design pattern (and the Singleton design pattern)
+ * @see DBConnection.hpp
+ */
 class ConnectionPool {
 private:
+	/**
+	 * Properties contained in the properties file
+	 */
 	std::map<std::string, std::string> _properties;
+	/**
+	 * Queue of connections
+	 */
 	std::deque<std::shared_ptr<db::DBConnection> > _pool;
-
+	/**
+	 * Connection pool instance, used to implement the Singleton
+	 */
 	static std::shared_ptr<ConnectionPool> _instance;
-	static std::mutex _creationMutex; // This mutex is used to prevent multiple instances being created
+	/**
+	 * Mutex used to prevent multiple instances being created
+	 */
+	static std::mutex _creationMutex;
+	/**
+	 * Mutex used when pushing connection in the pool
+	 */
 	std::mutex _pushMutex;
+	/**
+	 * Mutex used when popping a connetion from the pool
+	 */
 	std::mutex _popMutex;
+	/**
+	 * This condition variable is used to wait for available
+	 * connections (or space to push a connection in the pool, but this
+	 * should never happen)
+	 */
 	std::condition_variable _cv;
 
+	/**
+	 * Class constructor
+	 */
 	ConnectionPool();
 public:
+	/**
+	 * Size of the connection pool
+	 */
 	static unsigned int MAX_CONNECTIONS;
 
+	/**
+	 * Class destructor
+	 */
 	virtual ~ConnectionPool();
+
+	/**
+	 * Get a ConnectionPool instance. It is used to implement the  Singleton design pattern.
+	 * @return	An instance to the ConnectionPool
+	 */
 	static std::shared_ptr<ConnectionPool> getInstance();
 
+	/**
+	 * Get a connection from the pool
+	 * @return A connection to the database
+	 * @see DBConnection.hpp
+	 */
 	std::shared_ptr<db::DBConnection> popConnection();
+
+	/**
+	 * This method allows returning a database connection to the pool
+	 * @param[in] connection	Connection to be returned to the pool
+	 */
 	void pushConnection(std::shared_ptr<db::DBConnection> connection);
 };
 
