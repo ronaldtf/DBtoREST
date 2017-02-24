@@ -1,5 +1,5 @@
 # DBtoREST
-In this project I created a service that allows having access to all the information stored in a database. More specifically, I have implemented a RESTful service that allows any user to know which databases and tables exist in the configured database manager as well as show the information contained in any table. However, in order to skip database manager tables, a filtering mechanism to not show them have been implemented
+In this project I created a service that allows having access to all the information stored in a database. More specifically, I have implemented a RESTful service that allows any user to know which databases and tables exist in the configured database manager as well as show the information contained in any table. However, in order to skip database manager tables, a filtering mechanism to not show them has been implemented.
 
 ___
 
