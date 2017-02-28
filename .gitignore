@@ -7,3 +7,4 @@ Debug
 doc/*
 **/Server
 swagger/swagger
+/bin/
