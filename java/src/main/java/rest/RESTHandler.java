@@ -15,17 +15,22 @@ public class RESTHandler {
 	@GET
 	@Path("/dbs")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static List<String> getDBs() {
-		List<String> l = new ArrayList<String>();
-		l.add("one");
-		return l;
+	public static String getDBs() {
+		return "dbs";
 	}
 	
 	@GET
-	@Path("/dbs/tables/")
+	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getTables(@PathParam("tableName") String tableName) {
-		return tableName;
+	public static String getTables(@PathParam("dbName") String dbName) {
+		return dbName;
+	}
+	
+	@GET
+	@Path("/table/{dbName}/{tableName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public static String getTableInfo(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
+		return dbName + " " + tableName;
 	}
 	
 }
