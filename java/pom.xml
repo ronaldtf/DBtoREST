@@ -25,9 +25,29 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+	        <plugin>
+	          <groupId>org.codehaus.mojo</groupId>
+	          <artifactId>exec-maven-plugin</artifactId>
+	          <version>1.2.1</version>
+	          <executions>
+	              <execution>
+	                  <goals>
+	                      <goal>java</goal>
+	                  </goals>
+	              </execution>
+	          </executions>
+	          <configuration>
+	              <mainClass>main.java.rest.Server</mainClass>
+	          </configuration>
+	        </plugin>
 		</plugins>
 	</build>
 	<dependencies>
+	<dependency>
+	    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-server</artifactId>
+		    <version>2.25</version>
+		</dependency>
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
