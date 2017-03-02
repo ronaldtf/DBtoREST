@@ -66,7 +66,7 @@ int main() {
 	// Set service settings
 	std::shared_ptr<restbed::Settings> settings = std::shared_ptr<restbed::Settings>(new restbed::Settings());
 	settings->set_port(port);
-	settings->set_root("/");
+	settings->set_root("/DBtoREST");
 
 	// Publish the swagger file. This will allow to access to the REST service
 	// through the swagger UI. As the swagger UI is an optional component to use the
@@ -77,9 +77,16 @@ int main() {
 	swaggerJsonService->set_method_handler("GET", &rest::RESTHandler::swaggerJson);
 	service.publish(swaggerJsonService);
 
+	// Show information when entering to the root page
+	std::cout << "Setting info handler" << std::endl;
+	std::shared_ptr<restbed::Resource> infoRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
+	infoRequest->set_path("/");
+	infoRequest->set_method_handler("GET", rest::RESTHandler::infoHandler);
+	service.publish(infoRequest);
+
 	// Service to show databases
 	std::shared_ptr<restbed::Resource> dbsRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
-	dbsRequest->set_paths(std::set<std::string>{"/"});
+	dbsRequest->set_paths(std::set<std::string>{"/alldbs"});
 	dbsRequest->set_error_handler(&rest::RESTHandler::errorHandler);
 	dbsRequest->set_method_handler("GET", {{"Accept", "application/json"}, {"Content-Type", "application/json"}}, &rest::RESTHandler::databaseHandlerJson);
 	dbsRequest->set_method_handler("GET", {{"Accept", "application/xml"}, {"Content-Type", "application/xml"}}, &rest::RESTHandler::databaseHandlerXml);

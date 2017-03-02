@@ -97,6 +97,12 @@ public:
 	static void errorHandler( const int code, const std::exception& exc, const std::shared_ptr<restbed::Session> session);
 
 	/**
+	 * Define the info handler
+	 * @param[in] session	Session
+	 */
+	static void infoHandler(const std::shared_ptr<restbed::Session> session);
+
+	/**
 	 * Publish the swagger settings file
 	 * @param[in] session	Session
 	 */

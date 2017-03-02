@@ -140,8 +140,40 @@ void RESTHandler::singleTableHandler(const std::shared_ptr<restbed::Session> ses
 	}
 }
 
-void RESTHandler::errorHandler( const int, const std::exception&, const std::shared_ptr<restbed::Session> session) {
+void RESTHandler::errorHandler(const int code, const std::exception& exc, const std::shared_ptr<restbed::Session> session) {
 	throw restbed::SERVICE_UNAVAILABLE;
+}
+
+void RESTHandler::infoHandler(const std::shared_ptr<restbed::Session> session) {
+	if (session->is_open()) {
+		try {
+
+			std::string body;
+			body = "<h1>DBtoREST</h1>\n";
+			body += "<p><h4>In this project I created a service that allows having access to all the information stored in a ";
+			body += "database. More specifically, I have implemented a RESTful service that allows any user to know which ";
+			body += "databases and tables exist in the configured database manager as well as show the information contained ";
+			body += "in any table. However, in order to skip database manager tables, a filtering mechanism to not show them ";
+			body += "has been implemented.</h4></p>\n";
+			body += "Possible requests:\n";
+			body += "<ul>\n";
+			body += "<li>http://" + session->get_destination() + "/DBtoREST/alldbs</li>";
+			body += "<li>http://" + session->get_destination() + "/DBtoREST/alltables/&lt;dbName&gt;</li>";
+			body += "<li>http://" + session->get_destination() + "/DBtoREST/table/&lt;dbName&gt;/&lt;tableName&gt;</li>";
+			body += "</ul>\n";
+
+			restbed::Response response;
+			response.add_header("Content-Type", "text/html");
+			getResponse(restbed::OK, body, response);
+			session->close(response);
+		} catch (...) {
+			std::cerr << "Internal server error" << std::endl;
+			session->close(400, "Internal server error");
+		}
+	} else {
+		std::cerr << "Internal server error" << std::endl;
+		session->close(400, "Internal server error");
+	}
 }
 
 void RESTHandler::swaggerJson(const std::shared_ptr<restbed::Session> session) {

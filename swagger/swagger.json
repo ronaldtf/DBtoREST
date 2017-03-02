@@ -5,7 +5,7 @@
         "description": "Shows the content of your database throw a REST interface",
         "version": "1.0"
     },
-    "host": "localhost:8000",
+    "host": "localhost:8000/DBtoREST",
     "schemes": [
         "https",
         "http"
