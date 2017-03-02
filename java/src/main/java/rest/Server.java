@@ -28,7 +28,7 @@ public class Server {
     }
  
     private static URI getURI() {
-        return UriBuilder.fromUri("http://localhost/").port(8080).build();
+        return UriBuilder.fromUri("http://localhost/DBtoREST").port(8080).build();
     }
  
 }
