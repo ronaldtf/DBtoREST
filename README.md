@@ -51,6 +51,8 @@ The project has been created in C++ an using a set of libraries. The set of libr
 
 ## Compilation and Execution
 
+### C++ Project
+
 1.- To compile the project simply run:
 
 ````bash
@@ -75,9 +77,15 @@ make
  make runall
  ````
  
- By default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000/DBtoREST>
+### Java Project
+
+(under construction)
+
+
+In both cases, by default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000/DBtoREST>
  
- ## Using curl
+ 
+## Using curl
  
 In order to make a request and see the response from the service, we can use _curl_.
  
@@ -105,7 +113,7 @@ c. Examples of curl GET request to the root (in this case, the response is alway
  curl -X GET 'http://localhost:8000/DBtoREST/'
  ``` 
 
- ## Using Swagger-UI
+## Using Swagger-UI
  
  Swagger-UI provides a user friendly mechanism to make REST requests through a web browser. Once installed, it barely needs a configuration.
  It is recommended to change the url within the _index.html_ file, i.e. edit this file as text and set the url. For instance:
