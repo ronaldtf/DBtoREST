@@ -97,7 +97,7 @@ public:
 	static void errorHandler( const int code, const std::exception& exc, const std::shared_ptr<restbed::Session> session);
 
 	/**
-	 * Define the info handler
+	 * Define the info handler: This is used as to show information about the project
 	 * @param[in] session	Session
 	 */
 	static void infoHandler(const std::shared_ptr<restbed::Session> session);

@@ -78,7 +78,6 @@ int main() {
 	service.publish(swaggerJsonService);
 
 	// Show information when entering to the root page
-	std::cout << "Setting info handler" << std::endl;
 	std::shared_ptr<restbed::Resource> infoRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
 	infoRequest->set_path("/");
 	infoRequest->set_method_handler("GET", rest::RESTHandler::infoHandler);

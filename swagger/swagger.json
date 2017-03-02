@@ -16,7 +16,7 @@
         "application/xml"
     ],
     "paths": {
-        "/": {
+        "/alldbs": {
             "get": {
                 "summary": "Show the databases available, except those databases which belong to the DB system",
                 "description": "Your database client may handle multiple databases. A priory, the content\nof the database might not be known and we need to know which databases do\nwe have in the system.\n",
