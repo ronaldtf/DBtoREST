@@ -43,9 +43,11 @@ The project has been created in C++ an using a set of libraries. The set of libr
 
 4. RapidJson (<http://rapidjson.org/>): This library is used to create JSON documents. However, note that, as mentioned above, in order to generate XML documents, a customized converter has been used.
 
-5. Swagger-UI (optional) (<http://swagger.io/swagger-ui/>): This API provides a friendly interface to access to a REST service.
+5. curl (optional) (<https://curl.haxx.se/>): This tool can be used to make a request and get the response from the REST service.
 
-6. http-server (optional) (<https://www.npmjs.com/package/http-server>): This application provides a generic web service (used together with swagger-ui).
+6. Swagger-UI (optional) (<http://swagger.io/swagger-ui/>): This API provides a friendly interface to access to a REST service.
+
+7. http-server (optional) (<https://www.npmjs.com/package/http-server>): This application provides a generic web service (used together with swagger-ui).
 
 ## Compilation and Execution
 
@@ -73,4 +75,32 @@ make
  make runall
  ````
  
- By default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000>
+ By default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000/DBtoREST>
+ 
+ ## Using curl
+ 
+In order to make a request and see the response from the service, we can use _curl_.
+ 
+I show below a set of examples, assuming we have a database called _dbtest_ which contains a table called _tabletest_.
+Note that two formats are possible: _xml_ and _json_. However, when we request access to the root resource, we do not need to specify the response format because it will always return an _html_ text format showing a welcome message with some information about the project.
+
+a. JSON requests:
+ 
+ ````bash
+ curl -X GET 'http://localhost:8000/DBtoREST/'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alldbs'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alltables/dbtest'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
+ ```` 
+
+b. XML requests:
+
+ ````bash
+ curl -X GET 'http://localhost:8000/DBtoREST/'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alldbs'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alltables/dbtest'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
+ ```` 
+ 
+ ## Using Swagger
+ 
