@@ -111,7 +111,7 @@ c. Examples of curl GET request to the root (in this case, the response is alway
  It is recommended to change the url within the _index.html_ file, i.e. edit this file as text and set the url. For instance:
  
  ````html
-       if (url && url.length > 1) {
+      if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
         url = "http://localhost:8000/DBtoREST/swagger.json";
