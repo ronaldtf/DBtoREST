@@ -81,26 +81,43 @@ make
  
 In order to make a request and see the response from the service, we can use _curl_.
  
-I show below a set of examples, assuming we have a database called _dbtest_ which contains a table called _tabletest_.
-Note that two formats are possible: _xml_ and _json_. However, when we request access to the root resource, we do not need to specify the response format because it will always return an _html_ text format showing a welcome message with some information about the project.
+I show below a set of examples, assuming we have a database called _dbtest_ which contains a table called _tabletest_ and the service is running on _localhost_, port _8000_ (default).
 
-a. JSON requests:
+a. Examples of curl GET requests with JSON parameter:
  
  ````bash
- curl -X GET 'http://localhost:8000/DBtoREST/'
  curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alldbs'
  curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alltables/dbtest'
  curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
  ```` 
 
-b. XML requests:
+b. Examples of curl GET requests with XML parameter:
 
  ````bash
- curl -X GET 'http://localhost:8000/DBtoREST/'
  curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alldbs'
  curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alltables/dbtest'
  curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
  ```` 
+
+c. Examples of curl GET request to the root (in this case, the response is always in _html_ format):
  
- ## Using Swagger
+ ````bash
+ curl -X GET 'http://localhost:8000/DBtoREST/'
+ ``` 
+
+ ## Using Swagger-UI
  
+ Swagger-UI provides a user friendly mechanism to make REST requests through a web browser. Once installed, it barely needs a configuration.
+ It is recommended to change the url within the _index.html_ file, i.e. edit this file as text and set the url. For instance:
+ 
+ ````html
+       if (url && url.length > 1) {
+        url = decodeURIComponent(url[1]);
+      } else {
+        url = "http://localhost:8000/DBtoREST/swagger.json";
+      }
+ ```
+
+Once the project is running as well as the _http-server_, we go to the default page <http://localhost:8080> and browse the swagger folder. We will immediately see the swagger interface as well as the REST available actions.
+
+IMPORTANT: We have to start the _http-server_ from a path where the swagger-UI is a subfolder (otherwise, we will not be able to see the swagger-UI).
