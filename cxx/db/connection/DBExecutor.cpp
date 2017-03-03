@@ -17,7 +17,7 @@ DBExecutor::DBExecutor() {
 void DBExecutor::getDBs(std::vector<std::string>& databases) {
 
 	// Get a connection from the pool
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
+    std::shared_ptr<db::DBConnectionPool> connectionPool = db::DBConnectionPool::getInstance();
     std::shared_ptr<db::DBConnection> connection = connectionPool->popConnection();
 
 	// Exclude all databases which are from the system
@@ -41,7 +41,7 @@ void DBExecutor::getDBs(std::vector<std::string>& databases) {
 void DBExecutor::getTables(const std::string& db, std::vector<std::string>& tables) {
 
 	// Get a connection from the pool
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
+    std::shared_ptr<db::DBConnectionPool> connectionPool = db::DBConnectionPool::getInstance();
     std::shared_ptr<db::DBConnection> connection = connectionPool->popConnection();
 
     // Get the list of tables
@@ -54,7 +54,7 @@ void DBExecutor::getTables(const std::string& db, std::vector<std::string>& tabl
 void DBExecutor::getTableInfo(const std::string& db, const std::string& tableName, std::shared_ptr<db::table::Column>& table) {
 
 	// Get a connection from the pool
-    std::shared_ptr<db::ConnectionPool> connectionPool = db::ConnectionPool::getInstance();
+    std::shared_ptr<db::DBConnectionPool> connectionPool = db::DBConnectionPool::getInstance();
     std::shared_ptr<db::DBConnection> connection = connectionPool->popConnection();
 
     // Get the table contents

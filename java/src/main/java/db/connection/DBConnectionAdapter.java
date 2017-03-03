@@ -1,84 +1,89 @@
-/**
- * @file DBConnectionAdapter.h
- * @author Ronald T. Fernandez
- * @version 1.0
- */
+package db.connection;
 
-#ifndef CXX_DB_CONNECTION_DBCONNECTIONADAPTER_H_
-#define CXX_DB_CONNECTION_DBCONNECTIONADAPTER_H_
+import java.sql.Connection;
+import java.sql.Driver;
+import java.util.Map;
+import java.util.Vector;
 
-#include <map>
-#include <memory>
-#include <vector>
-
-#include <mysql_connection.h>
-#include <cppconn/driver.h>
-
-#include "DBConnection.hpp"
-
-namespace db {
+import db.table.Column;
 
 /**
  * This class implements the methods defined in the DBConnection interface.
  * These methods are implemented for working with a MySQL database.
  * The class is part of the Adapter design pattern.
- * @see DBConnection.h
+ * @see DBConnection.java
  */
-class DBConnectionAdapter: public DBConnection {
-private:
+public class DBConnectionAdapter extends DBConnection {
+
 	/**
 	 * MySQL database driver
 	 */
-	static sql::Driver* _driver;
+	private Driver _driver;
 	/**
 	 * MySQL database connection
 	 */
-	sql::Connection* _connection;
-public:
+	private Connection _connection;
+	
 	/**
 	 * Class constructor
 	 * @param[in] address	Address where the database service is running. It has the format host:port
 	 * @param[in] user		User login used to get connected to the database
 	 * @param[in] pass		Password used to authenticate the user
 	 */
-	DBConnectionAdapter(std::string address, std::string user, std::string pass);
+	public DBConnectionAdapter(String address, String user, String pass) {
+		super(address, user, pass);
+	}
 
 	/**
 	 * This method allows retrieving the information contained in a table from the database
 	 * The method derives from the base class <code>DBConnection</code>
-	 * @see DBConnection
+	 * @see DBConnection.java
 	 * @param[in] db		Name of the database
 	 * @param[in] tableName	Name of the table whose information is going to be retrieved
 	 * @param[out] output	Table content retrieved from the database
 	 */
-	void getTable(const std::string db, const std::string tableName, std::shared_ptr<db::table::Column>& output) const;
+	@Override
+	public void getTable(String db, String tableName, Column output) {
+		
+	}
+
+	/**
+	 * This method allows retrieving the information contained in a table from the database
+	 * The method derives from the base class <code>DBConnection</code>
+	 * @see DBConnection.java
+	 * @param[in] db		Name of the database
+	 * @param[in] tableName	Name of the table whose information is going to be retrieved
+	 * @param[out] output	Table content retrieved from the database
+	 */
+	@Override
+	public void getList(String query, Vector<String> result, String db) {
+		
+	}
 
 	/**
 	 * This method allows getting the information contained in a table or as a result of a query. The
 	 * only constraint for this method is that the result can have one single column (otherwise, only
 	 * the first column will be retrieved).
 	 * The method derives from the base class <code>DBConnection</code>
-	 * @see DBConnection
+	 * @see DBConnection.java
 	 * @param[in] query		Query used to get the table with a single column
 	 * @param[out] result	Information retrieved after running the query
 	 * @param[in] db		Database used to run the query
 	 */
-	void getList(const std::string query, std::vector<std::string>& result, const std::string db="") const;
+	@Override
+	public void getList(String query, Vector<String> result) {
+		
+	}
 
 	/**
 	 * This method allows retrieving the database names that belong to the database manager.
 	 * The method derives from the base class <code>DBConnection</code>
-	 * @see DBConnection
+	 * @see DBConnection.java
 	 * @param[out] systemDBs This map has the database names as the index and "true" as the value.
 	 */
-	void getSystemDBs(std::map<std::string, bool>& systemDBs) const;
+	@Override
+	public void getSystemDBs(Map<String, Boolean> systemDBs) {
+		
+	}
 
-	/**
-	 * Class destructor
-	 */
-	virtual ~DBConnectionAdapter();
-};
-
-} /* namespace db */
-
-#endif /* CXX_DB_CONNECTION_DBCONNECTIONADAPTER_H_ */
+}

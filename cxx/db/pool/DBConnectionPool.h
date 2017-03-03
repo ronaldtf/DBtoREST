@@ -24,7 +24,7 @@ namespace db {
  * It implements the Object Pool design pattern (and the Singleton design pattern)
  * @see DBConnection.hpp
  */
-class ConnectionPool {
+class DBConnectionPool {
 private:
 	/**
 	 * Properties contained in the properties file
@@ -37,7 +37,7 @@ private:
 	/**
 	 * Connection pool instance, used to implement the Singleton
 	 */
-	static std::shared_ptr<ConnectionPool> _instance;
+	static std::shared_ptr<DBConnectionPool> _instance;
 	/**
 	 * Mutex used to prevent multiple instances being created
 	 */
@@ -60,7 +60,7 @@ private:
 	/**
 	 * Class constructor
 	 */
-	ConnectionPool();
+	DBConnectionPool();
 public:
 	/**
 	 * Size of the connection pool
@@ -70,13 +70,13 @@ public:
 	/**
 	 * Class destructor
 	 */
-	virtual ~ConnectionPool();
+	virtual ~DBConnectionPool();
 
 	/**
-	 * Get a ConnectionPool instance. It is used to implement the  Singleton design pattern.
-	 * @return	An instance to the ConnectionPool
+	 * Get a DBConnectionPool instance. It is used to implement the  Singleton design pattern.
+	 * @return	An instance to the DBConnectionPool
 	 */
-	static std::shared_ptr<ConnectionPool> getInstance();
+	static std::shared_ptr<DBConnectionPool> getInstance();
 
 	/**
 	 * Get a connection from the pool

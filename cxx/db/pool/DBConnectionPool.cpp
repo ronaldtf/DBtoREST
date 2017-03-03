@@ -15,11 +15,11 @@
 
 namespace db {
 
-unsigned int ConnectionPool::MAX_CONNECTIONS = 10;
-std::shared_ptr<ConnectionPool> ConnectionPool::_instance = nullptr;
-std::mutex ConnectionPool::_creationMutex;
+unsigned int DBConnectionPool::MAX_CONNECTIONS = 10;
+std::shared_ptr<DBConnectionPool> DBConnectionPool::_instance = nullptr;
+std::mutex DBConnectionPool::_creationMutex;
 
-ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMutex() {
+DBConnectionPool::DBConnectionPool() : _properties(), _pool(), _pushMutex(), _popMutex() {
 
 	// Get properties from the properties file
 	utils::Utils::getDBProperties(_properties);
@@ -58,21 +58,21 @@ ConnectionPool::ConnectionPool() : _properties(), _pool(), _pushMutex(), _popMut
 	}
 }
 
-ConnectionPool::~ConnectionPool() {
+DBConnectionPool::~DBConnectionPool() {
 	_properties.clear();
 	_pool.clear();
 }
 
-std::shared_ptr<ConnectionPool> ConnectionPool::getInstance() {
+std::shared_ptr<DBConnectionPool> DBConnectionPool::getInstance() {
 	// This lock prevents creating multiple instances when concurrency is present
 	std::unique_lock<std::mutex> locker(_creationMutex);
 	if (_instance == nullptr) {
-		_instance = std::shared_ptr<ConnectionPool>(new ConnectionPool());
+		_instance = std::shared_ptr<DBConnectionPool>(new DBConnectionPool());
 	}
 	return _instance;
 }
 
-std::shared_ptr<db::DBConnection> ConnectionPool::popConnection() {
+std::shared_ptr<db::DBConnection> DBConnectionPool::popConnection() {
 	std::unique_lock<std::mutex> locker(_popMutex);
 
 	// Wait for an available connection if there are no connection in the pool
@@ -85,7 +85,7 @@ std::shared_ptr<db::DBConnection> ConnectionPool::popConnection() {
 	return element;
 }
 
-void ConnectionPool::pushConnection(std::shared_ptr<db::DBConnection> connection) {
+void DBConnectionPool::pushConnection(std::shared_ptr<db::DBConnection> connection) {
 	std::unique_lock<std::mutex> locker(_pushMutex);
 
 	// This should never happen. However, we must find a solution to prevent this
