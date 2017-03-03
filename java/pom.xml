@@ -5,6 +5,9 @@
 	<artifactId>DBtoREST</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
+	<reporting>
+		<outputDirectory>../doc</outputDirectory>
+	</reporting>
 	  <build>
 	  	<finalName>DBtoREST</finalName>
 		<sourceDirectory>src</sourceDirectory>
@@ -39,6 +42,20 @@
 	          <configuration>
 	              <mainClass>main.java.rest.Server</mainClass>
 	          </configuration>
+	        </plugin>
+	        <plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-javadoc-plugin</artifactId>
+	          <version>2.10.4</version>
+		      <configuration>
+		        <reportOutputDirectory>${project.reporting.outputDirectory}</reportOutputDirectory>
+		        <destDir>javadoc</destDir>
+		        <author>true</author>
+		        <version>1.0</version>
+		        <show>private</show>
+		        <detectLinks>true</detectLinks>
+		        <use>true</use>
+		      </configuration>	        
 	        </plugin>
 		</plugins>
 	</build>

@@ -31,7 +31,7 @@ public class Column {
 
 	/**
 	 * Class constructor.
-	 * @param[in] columnName	Name of the column in the table from the database
+	 * @param columnName	Name of the column in the table from the database
 	 */
 	public Column(String columnName) {
 		
@@ -39,8 +39,8 @@ public class Column {
 
 	/**
 	 * Class constructor
-	 * @param[in] columnName	Name of the column in the table from the database
-	 * @param[in] value			A single value in the column
+	 * @param columnName	Name of the column in the table from the database
+	 * @param value			A single value in the column
 	 */
 	public Column(String columnName, String value) {
 		
@@ -48,7 +48,7 @@ public class Column {
 
 	/**
 	 * Add a value to the column
-	 * @param[in] value			Value to be added
+	 * @param value			Value to be added
 	 */
 	public void addValue(String value) {
 		
@@ -56,7 +56,7 @@ public class Column {
 
 	/**
 	 * Get column values
-	 * @param[out] values		Values stored in the table
+	 * @param values		Values stored in the table
 	 */
 	void getValues(Vector<String> values) {
 		

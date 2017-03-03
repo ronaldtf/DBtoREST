@@ -3,8 +3,10 @@ all:
 	cd cxx && make -f cxx.mk all
 	cd java && mvn compiler:compile; mvn war:war
 doc:
+	@mkdir -p doc
+	@rm -rf doc/*
 	cd cxx && make -f cxx.mk doxygen
-	
+	cd java && mvn javadoc:javadoc	
 clean:
 	cd cxx && make -f cxx.mk clean
 	cd java && mvn clean

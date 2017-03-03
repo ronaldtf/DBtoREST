@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
-import db.connection.DBConnection;
+import main.java.db.connection.DBConnection;
 
 /**
  * This class defines a pool of database connections
  * It implements the Object Pool design pattern (and the Singleton design pattern)
- * @see DBConnection.java
+ * @see DBConnection
  */
 public class DBConnectionPool {
 	/**
@@ -67,7 +67,7 @@ public class DBConnectionPool {
 	/**
 	 * Get a connection from the pool
 	 * @return A connection to the database
-	 * @see DBConnection.hpp
+	 * @see DBConnection
 	 */
 	public DBConnection popConnection() {
 		return null;
@@ -75,7 +75,7 @@ public class DBConnectionPool {
 
 	/**
 	 * This method allows returning a database connection to the pool
-	 * @param[in] connection	Connection to be returned to the pool
+	 * @param connection	Connection to be returned to the pool
 	 */
 	public void pushConnection(DBConnection connection) {
 		
