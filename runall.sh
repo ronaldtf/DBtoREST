@@ -31,5 +31,11 @@ if [ $ERROR -eq 0 ]; then
 fi
 
 if [ $ERROR -eq 0 ]; then
-	make exec
+	if [[ $# -gt 0 ]] && [[ $1 == "cxx" ]]; then
+		make runcxx
+	elif [[ $# -gt 0 ]] && [[ $1 == "java" ]]; then
+		make runjava
+	else
+		echo -e "\nERROR: Cannot determine language (options: java/cxx)\n"
+	fi
 fi

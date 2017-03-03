@@ -14,5 +14,7 @@ runcxx:
 	cd cxx && make -f cxx.mk run 
 runjava:
 	cd java && mvn exec:java
-runall:
-	./runall.sh
+runallcxx:
+	./runall.sh cxx
+runalljava:
+	./runall.sh java
