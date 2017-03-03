@@ -51,35 +51,47 @@ The project has been created in C++ an using a set of libraries. The set of libr
 
 ## Compilation and Execution
 
-### C++ Project
-
 1.- To compile the project simply run:
 
 ````bash
 make
 ````
 
-2.- To generate the doxygen documentation, run:
+2.- To generate the doxygen+javadoc documentation, run:
 
  ````bash
  make doc
  ````
+
+### C++ Project
  
- 3.- To run simply the service without starting the rest of applications, run:
+ a.- To run simply the service without starting the rest of applications, run:
  
  ````bash
- make exec
+ make runcxx
  ````
  
- 4.- To run the application together with the required applications (i.e. to make the service work) run:
+ b.- To run the application together with the required applications (i.e. to make the service work) run:
  
  ````bash
- make runall
+ make runallcxx
  ````
  
 ### Java Project
 
 (under construction)
+ 
+ a.- To run simply the service without starting the rest of applications, run:
+ 
+ ````bash
+ make runjava
+ ````
+ 
+ b.- To run the application together with the required applications (i.e. to make the service work) run:
+ 
+ ````bash
+ make runalljava
+ ````
 
 
 In both cases, by default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000/DBtoREST>
