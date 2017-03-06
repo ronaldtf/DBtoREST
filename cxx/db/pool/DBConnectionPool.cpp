@@ -35,11 +35,11 @@ DBConnectionPool::DBConnectionPool() : _properties(), _pool(), _pushMutex(), _po
 		std::cerr << "[WARN] Could not get ip from host <" << hostIp << ">. Set to <localhost> (127.0.0.1)" << std::endl;
 		hostIp = "127.0.0.1";
 	}
-	std::string host = std::string("tcp://" + hostIp + ":" + _properties.at("dbport"));
+	std::string port = _properties.at("dbport");
 	std::string user = _properties.at("username");
 	std::string pass = _properties.at("password");
 	int max_conn = utils::Utils::str2int(_properties.at("max_connections"));
-	std::cout << "Connecting to " << host << " with username <" << user << ">, pass <" << pass << ">" << std::endl;
+	std::cout << "Connecting to " << hostIp << ":" << port << " with username <" << user << ">, pass <" << pass << ">" << std::endl;
 
 	// Set the maximum number of connections / pool size
 	if (max_conn == -1) {
@@ -52,7 +52,7 @@ DBConnectionPool::DBConnectionPool() : _properties(), _pool(), _pushMutex(), _po
 	// Initialize the pool
 	try {
 		for (unsigned int i=0; i<MAX_CONNECTIONS; ++i)
-			_pool.push_back(std::shared_ptr<db::DBConnection>(new db::DBConnectionAdapter(host.c_str(), user.c_str(), pass.c_str())));
+			_pool.push_back(std::shared_ptr<db::DBConnection>(new db::DBConnectionAdapter(hostIp.c_str(), port.c_str(), user.c_str(), pass.c_str())));
 	} catch (exception::DBException& e) {
 		// Max No. of connections exceeded
 		std::cerr << e.getMessage() << std::endl;

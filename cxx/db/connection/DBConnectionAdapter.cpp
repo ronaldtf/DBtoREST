@@ -17,9 +17,10 @@ namespace db {
 // Get the driver instance from the MySQL connector
 sql::Driver* DBConnectionAdapter::_driver = get_driver_instance();
 
-DBConnectionAdapter::DBConnectionAdapter(std::string address, std::string user, std::string pass) : DBConnection(address, user, pass) {
+DBConnectionAdapter::DBConnectionAdapter(std::string host, std::string port, std::string user, std::string pass) : DBConnection(host, port, user, pass) {
 	try {
 		// Get the connection
+		std::string address = std::string("tcp://" + host + ":" + port);
 		_connection = _driver->connect(address, user, pass);
 	} catch (sql::SQLException& e) {
 		// When the maximum number of connections is exceeded, an exception with error code 2026

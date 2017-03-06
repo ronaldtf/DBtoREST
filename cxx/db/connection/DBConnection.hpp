@@ -21,9 +21,13 @@ namespace db {
 class DBConnection {
 protected:
 	/**
-	 * Address where the database service is running. It has the format host:port
+	 * Host where the database service is running. It has the format host:port
 	 */
-	std::string address;
+	std::string host;
+	/**
+	 * Port where the database service is running. It has the format host:port
+	 */
+	std::string port;
 	/**
 	 * User login used to get connected to the database.
 	 */
@@ -36,11 +40,12 @@ protected:
 	/**
 	 * Class constructor. The constructor is simply defined in order to initialize the attributes.
 	 * Because the class is abstract, it will be never called directly except in the derived classes.
-	 * @param[in] address	Address where the database service is running
+	 * @param[in] host		Host where the database service is running
+	 * @param[in] port		Port where the database service is running
 	 * @param[in] user		User login in order to get connected to the database
 	 * @param[in] pass		User password used to authenticate the given user
 	 */
-	DBConnection(std::string address, std::string user, std::string pass) : address(address), user(user), pass(pass) {};
+	DBConnection(std::string host, std::string port, std::string user, std::string pass) : host(host), port(port), user(user), pass(pass) {};
 public:
 	/**
 	 * This method allows getting the information contain in a table

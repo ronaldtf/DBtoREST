@@ -37,11 +37,12 @@ private:
 public:
 	/**
 	 * Class constructor
-	 * @param[in] address	Address where the database service is running. It has the format host:port
+	 * @param[in] host		Host where the database service is running
+	 * @param[in] port		Port where the database serviceis running
 	 * @param[in] user		User login used to get connected to the database
 	 * @param[in] pass		Password used to authenticate the user
 	 */
-	DBConnectionAdapter(std::string address, std::string user, std::string pass);
+	DBConnectionAdapter(std::string host, std::string port, std::string user, std::string pass);
 
 	/**
 	 * This method allows retrieving the information contained in a table from the database
