@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import main.java.db.table.Column;
+import main.java.exception.DBException;
 
 /**
  * This class is used as an interface which defines the operations to be done in the database.
@@ -12,9 +13,13 @@ import main.java.db.table.Column;
 public abstract class DBConnection {
 
 	/**
-	 * Address where the database service is running. It has the format host:port
+	 * Host where the database service is running. It has the format host:port
 	 */
-	protected String address;
+	protected String host;
+	/**
+	 * Port where the database service is running. It has the format host:port
+	 */
+	protected String port;
 	/**
 	 * User login used to get connected to the database.
 	 */
@@ -27,12 +32,14 @@ public abstract class DBConnection {
 	/**
 	 * Class constructor. The constructor is simply defined in order to initialize the attributes.
 	 * Because the class is abstract, it will be never called directly except in the derived classes.
-	 * @param address	Address where the database service is running
+	 * @param host		Host where the database service is running
+	 * @param port		Port where the database service is running
 	 * @param user		User login in order to get connected to the database
 	 * @param pass		User password used to authenticate the given user
 	 */
-	protected DBConnection(final String address, final String user, final String pass) {
-		this.address = address;
+	protected DBConnection(final String host, final String port, final String user, final String pass) {
+		this.host = host;
+		this.port = port;
 		this.user = user;
 		this.pass = pass;
 	}
@@ -41,34 +48,37 @@ public abstract class DBConnection {
 	 * This method allows getting the information contain in a table
 	 * @param db 		Database where the table is placed
 	 * @param tableName	Name of the table whose information is being requested
-	 * @param output	Table content retrieved from the database
+	 * @return			Table content retrieved from the database
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
 	 */
-	public abstract void getTable(final String db, final String tableName, Column output);
+	public abstract Column getTable(final String db, final String tableName) throws DBException;
 	
 	/**
 	 * This method allows getting the information contained in a table or as a result of a query. The
 	 * only constraint for this method is that the result can have one single column (otherwise, only
 	 * the first column will be retrieved).
 	 * @param query		Query used to get the table with a single column
-	 * @param result	Information retrieved after running the query
 	 * @param db		Database used to run the query
+	 * @return			Information retrieved after running the query
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
 	 */
-	public abstract void getList(final String query, Vector<String> result, final String db);
+	public abstract Vector<String> getList(final String query, final String db) throws DBException;
 
 	/**
 	 * This method allows getting the information contained in a table or as a result of a query. The
 	 * only constraint for this method is that the result can have one single column (otherwise, only
 	 * the first column will be retrieved).
 	 * @param query		Query used to get the table with a single column
-	 * @param result	Information retrieved after running the query
+	 * @return			Information retrieved after running the query
 	 */
-	public abstract void getList(final String query, Vector<String> result);
+	public abstract Vector<String> getList(final String query) throws DBException;
 	
 	/**
 	 * This method allows retrieving the database names that belong to the database manager.
-	 * @param systemDBs This map has the database names as the index and "true" as the value.
+	 * @return Return a map with the database names as the index and "true" as the value.
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
 	 */
-	public abstract void getSystemDBs(Map<String, Boolean> systemDBs);
+	public abstract Map<String, Boolean> getSystemDBs() throws DBException;
 
 	
 }

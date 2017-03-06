@@ -26,15 +26,15 @@ private:
 	/**
 	 * Name of the column
 	 */
-	std::string columnName;
+	std::string _columnName;
 	/**
 	 * Values saved in the column
 	 */
-	std::vector<std::string> values;
+	std::vector<std::string> _values;
 	/**
 	 * Link to the next column in the table
 	 */
-	std::shared_ptr<Column> neighbor;
+	std::shared_ptr<Column> _neighbor;
 
 public:
 	/**
