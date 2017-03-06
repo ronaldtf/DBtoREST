@@ -62,6 +62,7 @@ public:
 	 * @param[in] query		Query used to get the table with a single column
 	 * @param[out] result	Information retrieved after running the query
 	 * @param[in] db		Database used to run the query
+	 * @exception DBException Throws an exception in case a problem with the DB has occurred
 	 */
 	void getList(const std::string query, std::vector<std::string>& result, const std::string db="") const;
 

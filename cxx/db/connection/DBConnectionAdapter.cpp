@@ -95,7 +95,7 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 		resultSet.reset(statement->executeQuery("SELECT * FROM " + tableName));
 		while (resultSet->next()) {
 			neighbor = output.get();
-			for (size_t i = 1; i<=numColumns; ++i) {
+			for (size_t i = 1; i <= numColumns; ++i) {
 				neighbor->addValue(resultSet->getString(i));
 				neighbor = neighbor->getNeighbor().get();
 			}
@@ -108,11 +108,10 @@ void DBConnectionAdapter::getTable(const std::string db, const std::string table
 
 void DBConnectionAdapter::getSystemDBs(std::map<std::string, bool>& systemDBs) const {
 	// We exclude those databases which are from the system
-	systemDBs = std::map<std::string, bool>();
-	systemDBs.insert(std::make_pair<std::string, bool>("information_schema", true));
-	systemDBs.insert(std::make_pair<std::string, bool>("mysql", true));
-	systemDBs.insert(std::make_pair<std::string, bool>("performance_schema", true));
-	systemDBs.insert(std::make_pair<std::string, bool>("sys", true));
+	systemDBs = {{"information_schema", true},
+			     {"mysql", true},
+				 {"performance_schema", true},
+				 {"sys", true}};
 }
 
 DBConnectionAdapter::~DBConnectionAdapter() {

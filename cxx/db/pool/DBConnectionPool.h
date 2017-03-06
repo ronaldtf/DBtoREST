@@ -47,12 +47,12 @@ private:
 	 */
 	std::mutex _pushMutex;
 	/**
-	 * Mutex used when popping a connetion from the pool
+	 * Mutex used when popping a connection from the pool
 	 */
 	std::mutex _popMutex;
 	/**
 	 * This condition variable is used to wait for available
-	 * connections (or space to push a connection in the pool, but this
+	 * connections (or a slot available to insert a new connection, but this
 	 * should never happen)
 	 */
 	std::condition_variable _cv;

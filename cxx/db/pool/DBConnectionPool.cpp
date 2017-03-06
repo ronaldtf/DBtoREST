@@ -21,13 +21,18 @@ std::mutex DBConnectionPool::_creationMutex;
 
 DBConnectionPool::DBConnectionPool() : _properties(), _pool(), _pushMutex(), _popMutex() {
 
-	// Get properties from the properties file
-	utils::Utils::getDBProperties(_properties);
+	try {
+		// Get properties from the properties file
+		utils::Utils::getDBProperties(_properties);
+	} catch (std::exception& e) {
+		std::cerr << "[ERROR] A problem has occurred when parsing the DB properties: " << e.what() << std::endl;
+		throw e;
+	}
 
 	// Initialize class attributes regarding the properties extracted from the properties file
 	std::string hostIp = utils::Utils::getIpAddress(_properties.at("dbhost"));
 	if (hostIp.empty()) {
-		std::cerr << "WARN: Could not get ip from host <" << hostIp << ">. Set to <localhost> (127.0.0.1)" << std::endl;
+		std::cerr << "[WARN] Could not get ip from host <" << hostIp << ">. Set to <localhost> (127.0.0.1)" << std::endl;
 		hostIp = "127.0.0.1";
 	}
 	std::string host = std::string("tcp://" + hostIp + ":" + _properties.at("dbport"));
@@ -38,7 +43,7 @@ DBConnectionPool::DBConnectionPool() : _properties(), _pool(), _pushMutex(), _po
 
 	// Set the maximum number of connections / pool size
 	if (max_conn == -1) {
-		std::cerr << "WARN: Maximum connections has not been (correctly) defined. Use the default (10)" << std::endl;
+		std::cerr << "[WARN] Maximum connections has not been (correctly) defined. Use the default (10)" << std::endl;
 	} else {
 		MAX_CONNECTIONS = max_conn;
 		std::cout << "[INFO] " << "Using a pool of " << MAX_CONNECTIONS << " connections..." << std::endl;
