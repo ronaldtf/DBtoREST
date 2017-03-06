@@ -1,8 +1,12 @@
 package main.java.db.connection;
 
+import java.util.Map;
 import java.util.Vector;
 
+import main.java.db.connection.DBConnection;
+import main.java.db.pool.DBConnectionPool;
 import main.java.db.table.Column;
+import main.java.exception.DBException;
 
 /**
  * This class is used in order to extract information from the database. Its methods simply
@@ -20,28 +24,72 @@ public class DBExecutor {
 	
 	/**
 	 * This method retrieves the list of database names, excluding the system databases
-	 * @param databases	List of database names
+	 * return			List of database names
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
+	 * @exception		Exception	A generic exception has occurred
 	 */
-	public static void getDBs(Vector<String> databases) {
+	public static Vector<String> getDBs() throws DBException, Exception {
+		// Get a connection from the pool
+		DBConnectionPool connectionPool = DBConnectionPool.getInstance();
+		DBConnection connection = connectionPool.popConnection();
 		
+		// Exclude all databases which are from the system
+		Map<String, Boolean> systemDBs = connection.getSystemDBs();
+		
+		// Filter system databases from the list
+		Vector<String> list = connection.getList("SHOW DATABASES");
+		for (String db : list) {
+			if (systemDBs.get(db) != null && systemDBs.get(db).booleanValue())
+				list.remove(db);
+		}
+	
+		// Put back the connection to the pool
+		connectionPool.pushConnection(connection);
+		
+		return list;
 	}
 
 	/**
 	 * This method retrieves the list of tables which are in a specific database name
-	 * @param db		Database name
-	 * @param tables	Table names in the database
+	 * @param 			db		Database name
+	 * @return 			tables	Table names in the database
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
+	 * @exception		Exception	A generic exception has occurred
 	 */
-	public static void getTables(final String db, Vector<String> tables) {
+	public static Vector<String> getTables(final String db) throws DBException, Exception {
+		// Get a connection from the pool
+		DBConnectionPool connectionPool = DBConnectionPool.getInstance();
+		DBConnection connection = connectionPool.popConnection();
 		
+	    // Get the list of tables
+	    Vector<String> result = connection.getList("SHOW TABLES from " + db, db);
+	    
+		// Put back the connection to the pool
+		connectionPool.pushConnection(connection);
+		
+		return result;
 	}
 
 	/**
 	 * This method retrieves the content of a table from a database
-	 * @param db		Database name
-	 * @param tableName	Name of the table
-	 * @param table	Table content retrieved from the database
+	 * @param 			db		Database name
+	 * @param 			tableName	Name of the table
+	 * @return			Table content retrieved from the database
+	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
+	 * @exception		Exception	A generic exception has occurred
 	 */
-	public static void getTableInfo(final String db, final String tableName, Column table) {
+	public static Column getTableInfo(final String db, final String tableName) throws DBException, Exception {
+		// Get a connection from the pool
+		DBConnectionPool connectionPool = DBConnectionPool.getInstance();
+		DBConnection connection = connectionPool.popConnection();
+		
+	    // Get the table contents
+	    Column result = connection.getTable(db, tableName);
+		
+		// Put back the connection to the pool
+		connectionPool.pushConnection(connection);
+		
+		return result;
 		
 	}
 }
