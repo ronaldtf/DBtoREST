@@ -27,7 +27,7 @@ public class RESTHandler {
 	}
 	
 	@GET
-	@Path("/dbs")
+	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getDBs() {
 		try {
