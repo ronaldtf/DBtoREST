@@ -14,7 +14,6 @@ import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.net.httpserver.HttpServer;
 
 import main.java.rest.RESTHandler;
-import main.java.rest.swagger.SwaggerJSONStandaloneHandler;
 import main.java.utils.Utils;
 
  
