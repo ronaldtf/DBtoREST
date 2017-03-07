@@ -17,7 +17,13 @@
 			  <artifactId>maven-war-plugin</artifactId>
 			  <version>3.0.0</version>
 			  <configuration>
-			  	<webXml>WEB-INF/web.xml</webXml>        
+			  	<webXml>WEB-INF/web.xml</webXml> 
+	          <webResources>
+	            <resource>
+	              <!-- this is relative to the pom.xml directory -->
+	              <directory>conf</directory>
+	            </resource>
+	          </webResources>
 			  </configuration>
       		</plugin>
 			<plugin>

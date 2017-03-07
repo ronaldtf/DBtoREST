@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import main.java.db.connection.DBConnection;
 import main.java.db.connection.DBConnectionAdapter;
 import main.java.exception.DBException;
-import utils.Utils;
+import main.java.utils.Utils;
 
 /**
  * This class defines a pool of database connections

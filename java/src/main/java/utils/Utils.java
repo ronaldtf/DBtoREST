@@ -1,4 +1,4 @@
-package utils;
+package main.java.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,7 +87,60 @@ public final class Utils {
 			throw exception;
 		
 		return properties;
+	}
+	
+	/**
+	 * Get the host name / IP from the REST properties file
+	 * @return Host name / IP for the REST service
+	 * @throws Exception An exception is thrown in case the property is not found
+	 */
+	public static String getRESTHost() throws Exception {
+		String host = getRESTProperties().getProperty("host");
+		if (host == null)
+			throw new Exception("Host parameter has not been set in the REST properties file");
+		return host;
+	}
 
+	/**
+	 * Get the port from the REST properties file
+	 * @return Port for the REST service
+	 * @throws Exception An exception is thrown in case the property is not found or port is invalid
+	 */
+	public static int getRESTPort() throws Exception {
+		String strPort = getRESTProperties().getProperty("port");
+		if (strPort == null)
+			throw new Exception("Port parameter has not been set in the REST properties file");
+		try {
+			int port = Integer.parseInt(strPort);
+			if (port == -1)
+				throw new NumberFormatException();
+			return port;
+		} catch (NumberFormatException nfe) {
+			throw new Exception("Invalid port (not a valid number: " + strPort + ")");
+		}
+	}
+	
+	/**
+	 * Read the content of a file and return the String content
+	 * @param fileName	Name of the file
+	 * @return			Content of the file
+	 * @throws IOException Throws an exception is the file is not found or there has been
+	 * 					a problem to read it.
+	 */
+	public static String readFile(String fileName) throws IOException {
+		FileInputStream fis = new FileInputStream(new File(fileName));
+		InputStreamReader isr = new InputStreamReader(fis);
+		BufferedReader br = new BufferedReader(isr);
+		String result = new String();
+		String line;
+		
+		while ((line = br.readLine()) != null)
+			result += line + "\n";
+		br.close();
+		isr.close();
+		fis.close();
+		
+		return result;
 	}
 	
 }
