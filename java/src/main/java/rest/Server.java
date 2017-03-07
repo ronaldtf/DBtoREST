@@ -43,7 +43,6 @@ public class Server {
         // Start the server
         URI uri = getURI(host, port);
         HttpServer httpServer =  HttpServerFactory.create(uri, resourceConfig);
-        //httpServer.createContext("/DBtoREST/swagger.json", new SwaggerJSONStandaloneHandler());
         
         System.out.println("Starting server on " + uri.toString() + "... (see application.wadl for further details)");
         httpServer.start();
