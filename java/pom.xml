@@ -85,18 +85,6 @@
 		    <artifactId>json</artifactId>
 		    <version>20160810</version>
 		</dependency>
-		<!--  This dependency is needed for the HttpHandler (when the Server is started as standalone application) -->
-		<dependency>
-		    <groupId>com.sun.net.httpserver</groupId>
-		    <artifactId>http</artifactId>
-		    <version>20070405</version>
-		</dependency>
-		<!--  This dependency is needed for the HttpServlet (when the Server is started as a web application) -->
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>servlet-api</artifactId>
-		    <version>2.5</version>
-		</dependency>
 	</dependencies>
 </project>
 
