@@ -72,6 +72,7 @@ public abstract class DBConnection {
 	 * the first column will be retrieved).
 	 * @param query		Query used to get the table with a single column
 	 * @return			Information retrieved after running the query
+	 * @exception		DBException Throws an exception in case a problem with the DB has occurred
 	 */
 	public abstract Vector<String> getList(final String query) throws DBException;
 	

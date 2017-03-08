@@ -25,7 +25,7 @@ public class DBExecutor {
 	
 	/**
 	 * This method retrieves the list of database names, excluding the system databases
-	 * return			List of database names
+	 * @return			List of database names
 	 * @exception 		DBException Throws an exception in case a problem with the DB has occurred
 	 * @exception		Exception	A generic exception has occurred
 	 */

@@ -22,6 +22,7 @@ public class RESTHandler {
 	
 	/**
 	 * Publish the swagger settings file
+	 * @return The swagger file content or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/swagger.json")
@@ -36,6 +37,7 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for the databases in the database manager in the JSON format
+	 * @return The list of databases in JSON format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/alldbs")
@@ -51,6 +53,7 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for the databases in the database manager in the XML format
+	 * @return The list of databases in XML format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/alldbs")
@@ -66,6 +69,8 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for the tables in a database in the JSON format
+	 * @param dbName	Database name
+	 * @return 			The list of tables in the database in JSON format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/alltables/{dbName}")
@@ -81,6 +86,8 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for the tables in a database in the XML format
+	 * @param dbName	Database name
+	 * @return 			The list of tables in the database in XML format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/alltables/{dbName}")
@@ -96,6 +103,9 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for a table content in the JSON format
+	 * @param dbName	Database name
+	 * @param tableName	Table name
+	 * @return 			The content of the table in JSON format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/table/{dbName}/{tableName}")
@@ -111,6 +121,9 @@ public class RESTHandler {
 	
 	/**
 	 * Define the handler when looking for a table content in the XML format
+	 * @param dbName	Database name
+	 * @param tableName	Table name
+	 * @return The content of the table in XML format or, if an error occurs, the error message
 	 */
 	@GET
 	@Path("/table/{dbName}/{tableName}")
@@ -126,6 +139,7 @@ public class RESTHandler {
 	
 	/**
 	 * Define the info handler: This is used as to show information about the project
+	 * @return The information of the project in HTML format
 	 */
 	@GET
 	@Path("/")
