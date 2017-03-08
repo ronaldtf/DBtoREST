@@ -56,6 +56,10 @@ public final class Utils {
 			String line;
 			// Read and parse the file
 			while ((line = br.readLine()) != null) {
+				line = line.toString();
+				// Skip comments or blank lines
+				if (line.startsWith("#") || line.isEmpty())
+					continue;
 				Vector<String> tokens = new Vector<String>();
 				StringTokenizer st = new StringTokenizer(line, ":");
 				while (st.hasMoreTokens())
@@ -85,7 +89,6 @@ public final class Utils {
 		
 		if (exception != null)
 			throw exception;
-		
 		return properties;
 	}
 	

@@ -32,6 +32,10 @@ public class DBConnectionPool {
 	 */
 	private static DBConnectionPool _instance = null;
 	/**
+	 * Mutex used when getting the Singleton class instance
+	 */
+	private static Object _createInstanceLock = new Object();
+	/**
 	 * Mutex used when pushing connection in the pool
 	 */
 	private Lock _pushMutex;
@@ -60,14 +64,13 @@ public class DBConnectionPool {
 		
 		Properties properties = null;
 		try {
-			properties = Utils.getRESTProperties();
+			properties = Utils.getDBProperties();
 			
 			String host = properties.getProperty("dbhost");
 			String port = properties.getProperty("dbport");
 			String user = properties.getProperty("username");
 			String pass = properties.getProperty("password");
 			String max  = properties.getProperty("max_connections");
-			
 			int max_conn = -1;
 			try {
 				max_conn = Integer.parseInt(max);
@@ -107,7 +110,7 @@ public class DBConnectionPool {
 	 * @return	An instance to the ConnectionPool
 	 */
 	public static DBConnectionPool getInstance() throws Exception{
-		synchronized(_instance) {
+		synchronized(_createInstanceLock) {
 			if (_instance == null)
 				_instance = new DBConnectionPool();
 			return _instance;
