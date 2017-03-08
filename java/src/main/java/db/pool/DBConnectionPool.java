@@ -106,6 +106,7 @@ public class DBConnectionPool {
 	/**
 	 * Get a ConnectionPool instance. It is used to implement the  Singleton design pattern.
 	 * @return	An instance to the ConnectionPool
+	 * @exception DBException Throws an exception in case a problem with the DB has occurred
 	 */
 	public static DBConnectionPool getInstance() throws Exception{
 		synchronized(_createInstanceLock) {
@@ -119,6 +120,7 @@ public class DBConnectionPool {
 	 * Get a connection from the pool
 	 * @return A connection to the database
 	 * @see DBConnection
+	 * @exception DBException Throws an exception in case a problem with the DB has occurred
 	 */
 	public DBConnection popConnection() throws DBException {
 		DBConnection connection = null;
@@ -140,6 +142,7 @@ public class DBConnectionPool {
 	/**
 	 * This method allows returning a database connection to the pool
 	 * @param connection	Connection to be returned to the pool
+	 * @exception DBException Throws an exception in case a problem with the DB has occurred
 	 */
 	public void pushConnection(DBConnection connection) throws DBException {
 		try {

@@ -65,7 +65,7 @@ public class Column {
 
 	/**
 	 * Get column values
-	 * return		Values stored in the table
+	 * @return		Values stored in the table
 	 */
 	public Vector<String> getValues() {
 		return _values;
