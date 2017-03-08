@@ -31,7 +31,6 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getDBs() {
 		try {
-			System.out.println("Aqui1");
 			Vector<String> dbs = DBExecutor.getDBs();
 			return JSONGenerator.getJson("tables", dbs);
 		} catch (Exception e) {
@@ -44,7 +43,6 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getTables(@PathParam("dbName") String dbName) {
 		try {
-			System.out.println("Aqui2");
 			Vector<String> dbs = DBExecutor.getTables(dbName);
 			return JSONGenerator.getJson("databases", dbs);
 		} catch (Exception e) {
@@ -57,7 +55,6 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getTableInfo(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
 		try {
-			System.out.println("Aqui3");
 			Column table = DBExecutor.getTableInfo(dbName, tableName);
 			return JSONGenerator.getJson("table", table);
 		} catch (Exception e) {

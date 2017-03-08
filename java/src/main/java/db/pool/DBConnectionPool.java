@@ -20,10 +20,6 @@ import main.java.utils.Utils;
  */
 public class DBConnectionPool {
 	/**
-	 * Properties contained in the properties file
-	 */
-	private Map<String, String> _properties;
-	/**
 	 * Queue of connections
 	 */
 	private Deque<DBConnection> _pool;
@@ -62,9 +58,8 @@ public class DBConnectionPool {
 		_pushMutex = new ReentrantLock();
 		_popMutex = new ReentrantLock();
 		
-		Properties properties = null;
 		try {
-			properties = Utils.getDBProperties();
+			Properties properties = Utils.getDBProperties();
 			
 			String host = properties.getProperty("dbhost");
 			String port = properties.getProperty("dbport");
@@ -87,9 +82,12 @@ public class DBConnectionPool {
 			}
 
 			try {
+				_pushMutex.lock();
 				for (int i=0; i<MAX_CONNECTIONS; ++i) {
 					_pool.push(new DBConnectionAdapter(host, port, user, pass));
+					_cvEmpty.signalAll();
 				}
+				_pushMutex.unlock();
 			} catch (DBException dbe) {
 				// Max No. of connections exceeded
 				System.err.println(dbe.getMessage());
