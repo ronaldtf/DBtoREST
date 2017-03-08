@@ -10,6 +10,11 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+/**
+ * This classes defines the generic utilities for different purposes
+ * @author 	Ronald T. Fernandez
+ * @version 1.0
+ */
 public final class Utils {
 
 	public static final String DB_CONF = "conf/db.properties";
@@ -41,7 +46,6 @@ public final class Utils {
 	 * @return Return the parsed properties
 	 * @throws Exception Throws an exception in case of any problem
 	 */
-	@SuppressWarnings("resource")
 	private static Properties parseFile(final String confName) throws Exception {
 		BufferedReader br = null;
 		InputStreamReader isr = null;

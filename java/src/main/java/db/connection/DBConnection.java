@@ -9,6 +9,8 @@ import main.java.exception.DBException;
 /**
  * This class is used as an interface which defines the operations to be done in the database.
  * It is defined as part of the Adapter design pattern.
+ * @author Ronald T. Fernandez
+ * @version 1.0
  */
 public abstract class DBConnection {
 

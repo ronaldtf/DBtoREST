@@ -3,7 +3,6 @@ package main.java.db.connection;
 import java.util.Map;
 import java.util.Vector;
 
-import main.java.db.connection.DBConnection;
 import main.java.db.pool.DBConnectionPool;
 import main.java.db.table.Column;
 import main.java.exception.DBException;
@@ -14,6 +13,8 @@ import main.java.exception.DBException;
  * class.
  * @see DBConnection
  * @see DBConnectionAdapter
+ * @author Ronald T. Fernandez
+ * @version 1.0
  */
 public class DBExecutor {
 	/**

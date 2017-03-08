@@ -12,9 +12,17 @@ import main.java.db.connection.DBExecutor;
 import main.java.db.table.Column;
 import main.java.utils.Utils;
 
+/**
+ * This classes defines the REST handlers
+ * @author 	Ronald T. Fernandez
+ * @version 1.0
+ */
 @Path("/")
 public class RESTHandler {
 	
+	/**
+	 * Publish the swagger settings file
+	 */
 	@GET
 	@Path("/swagger.json")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -26,6 +34,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for the databases in the database manager in the JSON format
+	 */
 	@GET
 	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,6 +49,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for the databases in the database manager in the XML format
+	 */
 	@GET
 	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_XML)
@@ -50,6 +64,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for the tables in a database in the JSON format
+	 */
 	@GET
 	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -62,6 +79,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for the tables in a database in the XML format
+	 */
 	@GET
 	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_XML)
@@ -74,6 +94,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for a table content in the JSON format
+	 */
 	@GET
 	@Path("/table/{dbName}/{tableName}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -86,6 +109,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the handler when looking for a table content in the XML format
+	 */
 	@GET
 	@Path("/table/{dbName}/{tableName}")
 	@Produces(MediaType.APPLICATION_XML)
@@ -98,6 +124,9 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * Define the info handler: This is used as to show information about the project
+	 */
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)

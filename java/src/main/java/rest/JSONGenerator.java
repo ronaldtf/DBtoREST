@@ -8,6 +8,11 @@ import org.json.XML;
 
 import main.java.db.table.Column;
 
+/**
+ * This class creates a JSON document for a list of values or a table
+ * @author 	Ronald T. Fernandez
+ * @version 1.0
+ */
 public class JSONGenerator {
 
 	/**
