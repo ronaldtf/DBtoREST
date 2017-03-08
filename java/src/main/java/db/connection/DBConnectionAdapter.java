@@ -26,7 +26,7 @@ public class DBConnectionAdapter extends DBConnection {
 	/**
 	 * Driver name
 	 */
-	public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
+	public static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 	/**
 	 * Connection prefix (used only to connect to the MySQL database)
 	 */
@@ -54,18 +54,20 @@ public class DBConnectionAdapter extends DBConnection {
 	 * @param port		Port where the database service is running
 	 * @param user		User login used to get connected to the database
 	 * @param pass		Password used to authenticate the user
+	 * @exception DBException	Throws an exception in case a problem with the DB has occurred
 	 */
 	public DBConnectionAdapter(String host, String port, String user, String pass) throws DBException {
 		super(host, port, user, pass);
 		try {
-			_connection = DriverManager.getConnection(CONN_PREFIX + host + ":" + port, user, pass);
+			System.out.println("Creating connection " + CONN_PREFIX + host + ":" + port);
+			_connection = DriverManager.getConnection(CONN_PREFIX + host + ":" + port + "?verifyServerCertificate=false&useSSL=true", user, pass);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			if (e.getErrorCode() == 2026) {
 				System.err.println("Maximum number of connections exceeded (" + e.getMessage() + ")");
 				throw new DBException("Max number of connections exceeded ", e.getErrorCode());
-			} else {
-				throw new DBException(e.getMessage());
 			}
+			throw new DBException(e.getMessage());
 		}
 	}
 

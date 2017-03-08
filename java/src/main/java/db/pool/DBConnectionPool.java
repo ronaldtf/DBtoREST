@@ -20,10 +20,6 @@ import main.java.utils.Utils;
  */
 public class DBConnectionPool {
 	/**
-	 * Properties contained in the properties file
-	 */
-	private Map<String, String> _properties;
-	/**
 	 * Queue of connections
 	 */
 	private Deque<DBConnection> _pool;
@@ -31,6 +27,10 @@ public class DBConnectionPool {
 	 * Connection pool instance, used to implement the Singleton
 	 */
 	private static DBConnectionPool _instance = null;
+	/**
+	 * Mutex used when getting the Singleton class instance
+	 */
+	private static Object _createInstanceLock = new Object();
 	/**
 	 * Mutex used when pushing connection in the pool
 	 */
@@ -58,16 +58,14 @@ public class DBConnectionPool {
 		_pushMutex = new ReentrantLock();
 		_popMutex = new ReentrantLock();
 		
-		Properties properties = null;
 		try {
-			properties = Utils.getRESTProperties();
+			Properties properties = Utils.getDBProperties();
 			
 			String host = properties.getProperty("dbhost");
 			String port = properties.getProperty("dbport");
 			String user = properties.getProperty("username");
 			String pass = properties.getProperty("password");
 			String max  = properties.getProperty("max_connections");
-			
 			int max_conn = -1;
 			try {
 				max_conn = Integer.parseInt(max);
@@ -84,9 +82,12 @@ public class DBConnectionPool {
 			}
 
 			try {
+				_pushMutex.lock();
 				for (int i=0; i<MAX_CONNECTIONS; ++i) {
 					_pool.push(new DBConnectionAdapter(host, port, user, pass));
+					_cvEmpty.signalAll();
 				}
+				_pushMutex.unlock();
 			} catch (DBException dbe) {
 				// Max No. of connections exceeded
 				System.err.println(dbe.getMessage());
@@ -107,7 +108,7 @@ public class DBConnectionPool {
 	 * @return	An instance to the ConnectionPool
 	 */
 	public static DBConnectionPool getInstance() throws Exception{
-		synchronized(_instance) {
+		synchronized(_createInstanceLock) {
 			if (_instance == null)
 				_instance = new DBConnectionPool();
 			return _instance;

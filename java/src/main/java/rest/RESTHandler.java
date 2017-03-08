@@ -29,36 +29,72 @@ public class RESTHandler {
 	@GET
 	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getDBs() {
+	public static String getDBsJSON() {
 		try {
 			Vector<String> dbs = DBExecutor.getDBs();
-			return "dbs";
+			return JSONGenerator.getJson("databases", dbs);
 		} catch (Exception e) {
-			return "";
+			return e.getMessage();
+		}
+	}
+	
+	@GET
+	@Path("/alldbs")
+	@Produces(MediaType.APPLICATION_XML)
+	public static String getDBsXml() {
+		try {
+			Vector<String> dbs = DBExecutor.getDBs();
+			return JSONGenerator.getXml("databases", dbs);
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 	}
 	
 	@GET
 	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getTables(@PathParam("dbName") String dbName) {
+	public static String getTablesJson(@PathParam("dbName") String dbName) {
 		try {
 			Vector<String> dbs = DBExecutor.getTables(dbName);
-			return "dbs";
+			return JSONGenerator.getJson("tables", dbs);
 		} catch (Exception e) {
-			return "";
+			return e.getMessage();
+		}
+	}
+	
+	@GET
+	@Path("/alltables/{dbName}")
+	@Produces(MediaType.APPLICATION_XML)
+	public static String getTablesXml(@PathParam("dbName") String dbName) {
+		try {
+			Vector<String> dbs = DBExecutor.getTables(dbName);
+			return JSONGenerator.getXml("tables", dbs);
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 	}
 	
 	@GET
 	@Path("/table/{dbName}/{tableName}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getTableInfo(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
+	public static String getTableInfoJson(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
 		try {
 			Column table = DBExecutor.getTableInfo(dbName, tableName);
-			return "dbs";
+			return JSONGenerator.getJson("table", table);
 		} catch (Exception e) {
-			return "";
+			return e.getMessage();
+		}
+	}
+	
+	@GET
+	@Path("/table/{dbName}/{tableName}")
+	@Produces(MediaType.APPLICATION_XML)
+	public static String getTableInfoXml(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
+		try {
+			Column table = DBExecutor.getTableInfo(dbName, tableName);
+			return JSONGenerator.getXml("table", table);
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 	}
 	
