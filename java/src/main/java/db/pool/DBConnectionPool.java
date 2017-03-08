@@ -1,9 +1,7 @@
 package main.java.db.pool;
 
 import java.util.Deque;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,6 +15,8 @@ import main.java.utils.Utils;
  * This class defines a pool of database connections
  * It implements the Object Pool design pattern (and the Singleton design pattern)
  * @see DBConnection
+ * @author Ronald T. Fernandez
+ * @version 1.0
  */
 public class DBConnectionPool {
 	/**
@@ -155,4 +155,4 @@ public class DBConnectionPool {
 			_pushMutex.unlock();
 		}
 	}
-};
+}

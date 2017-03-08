@@ -7,6 +7,8 @@ import java.util.Vector;
  * This way, a full table is defined through a set of columns and links.
  * This structure is dynamic and, therefore, it can be used for any table with
  * any number of columns.
+ * @author Ronald T. Fernandez
+ * @version 1.0
  */
 public class Column {
 	/**

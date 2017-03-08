@@ -5,9 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.mysql.jdbc.Driver;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -20,6 +17,8 @@ import main.java.exception.DBException;
  * These methods are implemented for working with a MySQL database.
  * The class is part of the Adapter design pattern.
  * @see DBConnection
+ * @author Ronald T. Fernandez
+ * @version 1.0
  */
 public class DBConnectionAdapter extends DBConnection {
 
@@ -192,10 +191,10 @@ public class DBConnectionAdapter extends DBConnection {
 	@Override
 	public Map<String, Boolean> getSystemDBs() throws DBException {
 		HashMap<String, Boolean> systemDBs = new HashMap<String, Boolean>();
-		systemDBs.put("information_schema", true);
-		systemDBs.put("mysql", true);
-		systemDBs.put("performance_schema", true);
-		systemDBs.put("sys", true);
+		systemDBs.put("information_schema", Boolean.TRUE);
+		systemDBs.put("mysql", Boolean.TRUE);
+		systemDBs.put("performance_schema", Boolean.TRUE);
+		systemDBs.put("sys", Boolean.TRUE);
 		
 		return systemDBs;
 	}

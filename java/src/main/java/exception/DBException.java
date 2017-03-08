@@ -1,5 +1,14 @@
 package main.java.exception;
 
+/**
+ * This class is used to indicate that some problem has occurred with the database connection or
+ * transaction. It is equivalent to the java.sql.SQLException in MySQL. However, it has been created
+ * in order to offer more flexibility when using databases (we might use a different database,
+ * e.g. Oracle)
+ * @author Ronald T. Fernandez
+ * @version 1.0
+ */
+@SuppressWarnings("serial")
 public class DBException extends Exception {
 	/**
 	 * Message that provoked the exception being thrown.
@@ -40,7 +49,7 @@ public class DBException extends Exception {
 	 */
 	public final String getMessage() { 
 		return _message; 
-	};
+	}
 
 	/**
 	 * This method allows getting the error code related to the exception.
@@ -48,5 +57,5 @@ public class DBException extends Exception {
 	 */
 	public final int getErrorCode() { 
 		return _errorCode; 
-		};
+	}
 }
