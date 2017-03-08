@@ -4,32 +4,33 @@ import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 import main.java.db.table.Column;
 
 public class JSONGenerator {
+
 	/**
 	 * Create a JSON document given a list of values
 	 * @param root			Root tag
 	 * @param elements		List of values to generate the JSON document
-	 * @return				JSON document in text format
+	 * @return				JSON document
 	 */
-	public static String getJson(final String root, final Vector<String> elements) {
+	private static JSONObject getJsonObject(final String root, final Vector<String> elements) {
 		JSONObject jsonObject = new JSONObject();
 		JSONArray jsonArray = new JSONArray(elements);
 		jsonObject.put(root, jsonArray);
-
-		// Return a formatted String
-		return jsonObject.toString(2);
+		
+		return jsonObject;
 	}
-
+	
 	/**
 	 * Create a JSON document given a database table
 	 * @param root		Root tag
 	 * @param table		Table values
-	 * @return			JSON document in text format
+	 * @return			JSON document
 	 */
-	public static String getJson(final String root, final Column table) {	
+	private static JSONObject getJsonObject(final String root, final Column table) {	
 		// Create a with the values and initialize it
 		int size = table.getValues().size();
 		Vector<JSONArray> elements = new Vector<JSONArray>(size);
@@ -57,8 +58,47 @@ public class JSONGenerator {
 		// Create the root object with all the elements
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(root, elements);
-		
-		// Return the formatted String
-		return jsonObject.toString(2);
+
+		return jsonObject;
+	}
+	
+	/**
+	 * Create a JSON document given a list of values
+	 * @param root			Root tag
+	 * @param elements		List of values to generate the JSON document
+	 * @return				JSON document in text format
+	 */
+	public static String getJson(final String root, final Vector<String> elements) {
+		return getJsonObject(root,  elements).toString(2);
+	}
+
+	/**
+	 * Create a XML document given a list of values
+	 * @param root			Root tag
+	 * @param elements		List of values to generate the JSON document
+	 * @return				XML document in text format
+	 */
+	public static String getXml(final String root, final Vector<String> elements) {
+		return XML.toString(getJsonObject(root,  elements));
+	}
+	
+	/**
+	 * Create a JSON document given a database table
+	 * @param root		Root tag
+	 * @param table		Table values
+	 * @return			JSON document in text format
+	 */
+	public static String getJson(final String root, final Column table) {
+		return getJsonObject(root, table).toString(2);
+	}
+	
+	/**
+	 * Create a XML document given a database table
+	 * @param root		Root tag
+	 * @param table		Table values
+	 * @return			XML document in text format
+	 */
+	public static String getXml(final String root, final Column table) {
+		return XML.toString(getJsonObject(root, table));
 	}
 }
