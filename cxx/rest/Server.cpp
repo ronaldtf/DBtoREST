@@ -33,7 +33,7 @@ std::string getHost(std::map<std::string, std::string>& properties) {
 /**
  * Get the port from the properties file
  * @param[in] properties	Map of properties
- * @return					Port or a default value (8000) in case the port property is not found
+ * @return					Port or a default value (8080) in case the port property is not found
  */
 short getPort(std::map<std::string, std::string>& properties) {
 	int port = -1;
@@ -42,8 +42,8 @@ short getPort(std::map<std::string, std::string>& properties) {
 	} catch (...) {
 	}
 	if (port == -1) {
-		std::cerr << "WARN: Could not get port from properties (empty value). Set to <port> (8000)" << std::endl;
-		port = 8000;
+		std::cerr << "WARN: Could not get port from properties (empty value). Set to <port> (8080)" << std::endl;
+		port = 8080;
 	}
 	return port;
 }

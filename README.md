@@ -92,35 +92,35 @@ make
  ````
 
 
-In both cases, by default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8000/DBtoREST>
+In both cases, by default, the http-server is running on <http://localhost:8080> and the REST service on <http://localhost:8080/DBtoREST>
  
  
 ## Using curl
  
 In order to make a request and see the response from the service, we can use _curl_.
  
-I show below a set of examples, assuming we have a database called _dbtest_ which contains a table called _tabletest_ and the service is running on _localhost_, port _8000_ (default).
+I show below a set of examples, assuming we have a database called _dbtest_ which contains a table called _tabletest_ and the service is running on _localhost_, port _8080_ (default).
 
 a. Examples of curl GET requests with JSON parameter:
  
  ````bash
- curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alldbs'
- curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/alltables/dbtest'
- curl -X GET --header 'Accept: application/json' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8080/DBtoREST/alldbs'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8080/DBtoREST/alltables/dbtest'
+ curl -X GET --header 'Accept: application/json' 'http://localhost:8080/DBtoREST/table/dbtest/tabletest'
  ```` 
 
 b. Examples of curl GET requests with XML parameter:
 
  ````bash
- curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alldbs'
- curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/alltables/dbtest'
- curl -X GET --header 'Accept: application/xml' 'http://localhost:8000/DBtoREST/table/dbtest/tabletest'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8080/DBtoREST/alldbs'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8080/DBtoREST/alltables/dbtest'
+ curl -X GET --header 'Accept: application/xml' 'http://localhost:8080/DBtoREST/table/dbtest/tabletest'
  ```` 
 
 c. Examples of curl GET request to the root (in this case, the response is always in _html_ format):
  
  ````bash
- curl -X GET 'http://localhost:8000/DBtoREST/'
+ curl -X GET 'http://localhost:8080/DBtoREST/'
  ``` 
 
 ## Using Swagger-UI
@@ -132,7 +132,7 @@ c. Examples of curl GET request to the root (in this case, the response is alway
       if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
-        url = "http://localhost:8000/DBtoREST/swagger.json";
+        url = "http://localhost:8080/DBtoREST/swagger.json";
       }
  ```
 
