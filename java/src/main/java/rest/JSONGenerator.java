@@ -58,7 +58,7 @@ public class JSONGenerator {
 				elements.elementAt(index).put(jsonObject);
 				++index;
 			}
-		} while ((row = table.getNeighbor()) != null);
+		} while ((row = row.getNeighbor()) != null);
 		
 		// Create the root object with all the elements
 		JSONObject jsonObject = new JSONObject();
@@ -80,11 +80,14 @@ public class JSONGenerator {
 	/**
 	 * Create a XML document given a list of values
 	 * @param root			Root tag
+	 * @param elementTag	Tag for each element in the list
 	 * @param elements		List of values to generate the JSON document
 	 * @return				XML document in text format
 	 */
-	public static String getXml(final String root, final Vector<String> elements) {
-		return XML.toString(getJsonObject(root,  elements));
+	public static String getXml(final String root, final String elementTag, final Vector<String> elements) {
+		return "<" + root + ">\n" + 
+				XML.toString(getJsonObject(elementTag,  elements)) +
+				"</" + root + ">";
 	}
 	
 	/**

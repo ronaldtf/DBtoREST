@@ -1,5 +1,6 @@
 package main.java.db.pool;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Properties;
 import java.util.concurrent.locks.Condition;
@@ -52,11 +53,15 @@ public class DBConnectionPool {
 
 	/**
 	 * Class constructor
-	 * @exception Exception Throws an exception in case an inialization problem has occurred.
+	 * @exception Exception Throws an exception in case an initialization problem has occurred.
 	 */
 	private DBConnectionPool() throws Exception {
 		_pushMutex = new ReentrantLock();
 		_popMutex = new ReentrantLock();
+		_cvEmpty = _pushMutex.newCondition();
+		_cvFull = _popMutex.newCondition();
+		
+		_pool = new ArrayDeque<DBConnection>();
 		
 		try {
 			Properties properties = Utils.getDBProperties();
@@ -70,6 +75,7 @@ public class DBConnectionPool {
 			try {
 				max_conn = Integer.parseInt(max);
 			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
 			}
 
 			System.out.println("Connecting to " + host + ":" + port + " with username <" + user + ">, pass <" + pass + ">");
@@ -94,6 +100,7 @@ public class DBConnectionPool {
 			}
 			
 		} catch (Exception e) {
+			System.err.println("An internal problem has occurred when creating the ConnectionPool: " + e.getLocalizedMessage());
 			throw e;
 		}
 	}

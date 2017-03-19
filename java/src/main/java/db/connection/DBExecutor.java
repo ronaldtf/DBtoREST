@@ -39,15 +39,16 @@ public class DBExecutor {
 		
 		// Filter system databases from the list
 		Vector<String> list = connection.getList("SHOW DATABASES");
+		Vector<String> filteredList = new Vector<String>();
 		for (String db : list) {
-			if (systemDBs.get(db) != null && systemDBs.get(db).booleanValue())
-				list.remove(db);
+			if (systemDBs.get(db) == null || !systemDBs.get(db).booleanValue())
+				filteredList.addElement(db);
 		}
 	
 		// Put back the connection to the pool
 		connectionPool.pushConnection(connection);
 		
-		return list;
+		return filteredList;
 	}
 
 	/**
