@@ -61,7 +61,7 @@ public class RESTHandler {
 	public static String getDBsXml() {
 		try {
 			Vector<String> dbs = DBExecutor.getDBs();
-			return JSONGenerator.getXml("databases", dbs);
+			return JSONGenerator.getXml("databases", "database", dbs);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
@@ -77,8 +77,8 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getTablesJson(@PathParam("dbName") String dbName) {
 		try {
-			Vector<String> dbs = DBExecutor.getTables(dbName);
-			return JSONGenerator.getJson("tables", dbs);
+			Vector<String> tables = DBExecutor.getTables(dbName);
+			return JSONGenerator.getJson("tables", tables);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
@@ -94,8 +94,8 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_XML)
 	public static String getTablesXml(@PathParam("dbName") String dbName) {
 		try {
-			Vector<String> dbs = DBExecutor.getTables(dbName);
-			return JSONGenerator.getXml("tables", dbs);
+			Vector<String> tables = DBExecutor.getTables(dbName);
+			return JSONGenerator.getXml("tables", "table", tables);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
