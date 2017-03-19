@@ -78,8 +78,6 @@ make
  ````
  
 ### Java Project
-
-(under construction)
  
  a.- To run simply the service without starting the rest of applications, run:
  
