@@ -58,7 +58,7 @@ public class JSONGenerator {
 				elements.elementAt(index).put(jsonObject);
 				++index;
 			}
-		} while ((row = table.getNeighbor()) != null);
+		} while ((row = row.getNeighbor()) != null);
 		
 		// Create the root object with all the elements
 		JSONObject jsonObject = new JSONObject();
