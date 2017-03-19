@@ -79,6 +79,10 @@ public class Column {
 		return _columnName;
 	}
 
+	/**
+	 * Set a row neighbor to the current rows
+	 * @param column			Neighbor rows
+	 */
 	public void setNeighbor(Column column) {
 		_neighbor = column;
 	}
