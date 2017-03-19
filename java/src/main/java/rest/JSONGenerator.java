@@ -85,9 +85,7 @@ public class JSONGenerator {
 	 * @return				XML document in text format
 	 */
 	public static String getXml(final String root, final String elementTag, final Vector<String> elements) {
-		return "<" + root + ">\n" + 
-				XML.toString(getJsonObject(elementTag,  elements)) +
-				"</" + root + ">";
+		return XML.toString(getJsonObject(elementTag,  elements), root);
 	}
 	
 	/**
@@ -102,11 +100,12 @@ public class JSONGenerator {
 	
 	/**
 	 * Create a XML document given a database table
-	 * @param root		Root tag
-	 * @param table		Table values
-	 * @return			XML document in text format
+	 * @param root			Root tag
+	 * @param elementTag	Element tag
+	 * @param table			Table values
+	 * @return				XML document in text format
 	 */
-	public static String getXml(final String root, final Column table) {
-		return XML.toString(getJsonObject(root, table));
+	public static String getXml(final String root, final String elementTag, final Column table) {
+		return XML.toString(getJsonObject(elementTag, table), root);
 	}
 }

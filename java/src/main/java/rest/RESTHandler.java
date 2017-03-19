@@ -131,9 +131,7 @@ public class RESTHandler {
 	public static String getTableInfoXml(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
 		try {
 			Column table = DBExecutor.getTableInfo(dbName, tableName);
-			return "<tables>\n" + 
-					JSONGenerator.getXml("table", table) +
-					"</tables>";
+			return JSONGenerator.getXml("tables", "table", table);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
