@@ -87,23 +87,23 @@ int main() {
 	std::shared_ptr<restbed::Resource> dbsRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
 	dbsRequest->set_paths(std::set<std::string>{"/alldbs"});
 	dbsRequest->set_error_handler(&rest::RESTHandler::errorHandler);
-	dbsRequest->set_method_handler("GET", {{"Accept", "application/json"}, {"Content-Type", "application/json"}}, &rest::RESTHandler::databaseHandlerJson);
+	dbsRequest->set_method_handler("GET", &rest::RESTHandler::databaseHandlerJson); // Set the default return type when return type is not specified
 	dbsRequest->set_method_handler("GET", {{"Accept", "application/xml"}, {"Content-Type", "application/xml"}}, &rest::RESTHandler::databaseHandlerXml);
 	service.publish(dbsRequest);
 
 	// Service to show tables from a database
 	std::shared_ptr<restbed::Resource> tablesRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
 	tablesRequest->set_path("/alltables/{dbname:.*}");
-	tablesRequest->set_error_handler(&rest::RESTHandler::errorHandler);
-	tablesRequest->set_method_handler("GET", {{"Accept", "application/json"}, {"Content-Type", "application/json"}}, &rest::RESTHandler::tablesHandlerJson);
+	tablesRequest->set_error_handler(&rest::RESTHandler::errorHandler); // Set the default return type when return type is not specified
+	tablesRequest->set_method_handler("GET", &rest::RESTHandler::tablesHandlerJson);
 	tablesRequest->set_method_handler("GET", {{"Accept", "application/xml"}, {"Content-Type", "application/xml"}}, &rest::RESTHandler::tablesHandlerXml);
 	service.publish(tablesRequest);
 
 	// Service to show table contents
 	std::shared_ptr<restbed::Resource> tableRequest = std::shared_ptr<restbed::Resource>(new restbed::Resource());
 	tableRequest->set_path("/table/{dbname:.*}/{tablename:.*}");
-	tableRequest->set_error_handler(&rest::RESTHandler::errorHandler);
-	tableRequest->set_method_handler("GET", {{"Accept", "application/json"}, {"Content-Type", "application/json"}}, &rest::RESTHandler::singleTableHandlerJson);
+	tableRequest->set_method_handler("GET", &rest::RESTHandler::singleTableHandlerJson);
+	tableRequest->set_error_handler(&rest::RESTHandler::errorHandler); // Set the default return type when return type is not specified
 	tableRequest->set_method_handler("GET", {{"Accept", "application/xml"}, {"Content-Type", "application/xml"}}, &rest::RESTHandler::singleTableHandlerXml);
 	service.publish(tableRequest);
 

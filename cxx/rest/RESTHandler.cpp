@@ -182,8 +182,7 @@ void RESTHandler::swaggerJson(const std::shared_ptr<restbed::Session> session) {
 
 	std::ifstream ifstr = std::ifstream(std::string("../swagger/swagger.json").c_str());
 	while (std::getline(ifstr, tmpStr)) {
-		utils::Utils::trim(tmpStr);
-		body += tmpStr + " ";
+		body += tmpStr + "\n";
 	}
 	ifstr.close();
 	session->set_headers({{"Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT"},{"Access-Control-Allow-Origin", "*"}});
