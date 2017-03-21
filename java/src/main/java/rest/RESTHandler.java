@@ -1,5 +1,6 @@
 package main.java.rest;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.ws.rs.GET;
@@ -7,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import main.java.db.connection.DBExecutor;
 import main.java.db.table.Column;
@@ -20,6 +22,46 @@ import main.java.utils.Utils;
 @Path("/")
 public class RESTHandler {
 	
+	final static String SEP = System.getProperty("file.separator");
+	final String CURR_DIR = this.getClass().getClassLoader().getResource("").getPath();
+	
+	/**
+	 * Http allowed response codes
+	 * OK: 	http code 200 (success)
+	 * NOK: http code 404 (bad request)
+	 */
+	private enum HttpResponseCode {
+		OK(200), 
+		NOK(400);
+		
+		private int code;
+		
+		/**
+		 * Class Constructor
+		 * @param code	Http status value
+		 */
+		HttpResponseCode(int code) {
+			this.code = code;
+		}
+		
+		/**
+		 * Get the associated status
+		 * @return Http status
+		 */
+		public int getValue() {
+			return this.code;
+		}
+	}
+	
+	private static Response getResponseWithHeaders(String content, HttpResponseCode status) {
+		return Response.ok(content).
+				status(status.getValue()).
+				header("Access-Control-Allow-Origin","*").
+				header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE").
+				header("Access-Control-Max-Age", "3600").
+				header("Access-Control-Allow-Headers", "x-requested-with").build();
+	}
+	
 	/**
 	 * Publish the swagger settings file
 	 * @return The swagger file content or, if an error occurs, the error message
@@ -27,14 +69,12 @@ public class RESTHandler {
 	@GET
 	@Path("/swagger.json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getSwaggerJson() {
+	public Response getSwaggerJson() {
 		try {
-			return System.getProperty("user.dir") + 
-				      System.getProperty("file.separator") + "conf/swagger.json";
-				      //Utils.readFile(System.getProperty("user.dir") + 
-				      //System.getProperty("file.separator") + "conf/swagger.json");
+			final String fileName = CURR_DIR + SEP + ".." + SEP + ".." + SEP + "conf" + SEP + "swagger.json";
+			return getResponseWithHeaders(Utils.readFile(fileName), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -42,15 +82,16 @@ public class RESTHandler {
 	 * Define the handler when looking for the databases in the database manager in the JSON format
 	 * @return The list of databases in JSON format or, if an error occurs, the error message
 	 */
+	@SuppressWarnings("static-method")
 	@GET
 	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getDBsJSON() {
+	public Response getDBsJSON() {
 		try {
 			Vector<String> dbs = DBExecutor.getDBs();
-			return JSONGenerator.getJson("databases", dbs);
+			return getResponseWithHeaders(JSONGenerator.getJson("databases", dbs), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -58,15 +99,16 @@ public class RESTHandler {
 	 * Define the handler when looking for the databases in the database manager in the XML format
 	 * @return The list of databases in XML format or, if an error occurs, the error message
 	 */
+	@SuppressWarnings("static-method")
 	@GET
 	@Path("/alldbs")
 	@Produces(MediaType.APPLICATION_XML)
-	public static String getDBsXml() {
+	public Response getDBsXml() {
 		try {
 			Vector<String> dbs = DBExecutor.getDBs();
-			return JSONGenerator.getXml("databases", "database", dbs);
+			return getResponseWithHeaders(JSONGenerator.getXml("databases", "database", dbs), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -75,15 +117,16 @@ public class RESTHandler {
 	 * @param dbName	Database name
 	 * @return 			The list of tables in the database in JSON format or, if an error occurs, the error message
 	 */
+	@SuppressWarnings("static-method")
 	@GET
 	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getTablesJson(@PathParam("dbName") String dbName) {
+	public Response getTablesJson(@PathParam("dbName") String dbName) {
 		try {
 			Vector<String> tables = DBExecutor.getTables(dbName);
-			return JSONGenerator.getJson("tables", tables);
+			return getResponseWithHeaders(JSONGenerator.getJson("tables", tables), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -95,12 +138,12 @@ public class RESTHandler {
 	@GET
 	@Path("/alltables/{dbName}")
 	@Produces(MediaType.APPLICATION_XML)
-	public static String getTablesXml(@PathParam("dbName") String dbName) {
+	public static Response getTablesXml(@PathParam("dbName") String dbName) {
 		try {
 			Vector<String> tables = DBExecutor.getTables(dbName);
-			return JSONGenerator.getXml("tables", "table", tables);
+			return getResponseWithHeaders(JSONGenerator.getXml("tables", "table", tables), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -113,12 +156,12 @@ public class RESTHandler {
 	@GET
 	@Path("/table/{dbName}/{tableName}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String getTableInfoJson(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
+	public static Response getTableInfoJson(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
 		try {
 			Column table = DBExecutor.getTableInfo(dbName, tableName);
-			return JSONGenerator.getJson("table", table);
+			return getResponseWithHeaders(JSONGenerator.getJson("table", table), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -131,12 +174,12 @@ public class RESTHandler {
 	@GET
 	@Path("/table/{dbName}/{tableName}")
 	@Produces(MediaType.APPLICATION_XML)
-	public static String getTableInfoXml(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
+	public static Response getTableInfoXml(@PathParam("dbName") String dbName, @PathParam("tableName") String tableName) {
 		try {
 			Column table = DBExecutor.getTableInfo(dbName, tableName);
-			return JSONGenerator.getXml("tables", "table", table);
+			return getResponseWithHeaders(JSONGenerator.getXml("tables", "table", table), HttpResponseCode.OK);
 		} catch (Exception e) {
-			return e.getMessage();
+			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);
 		}
 	}
 	
@@ -147,7 +190,7 @@ public class RESTHandler {
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
-	public static String getInfo() {
+	public static Response getInfo() {
 		String host;
 		try {
 			host = Utils.getRESTHost();
@@ -175,7 +218,7 @@ public class RESTHandler {
 		body += "<li>http://" + host + ":" + port + "/DBtoREST/table/&lt;dbName&gt;/&lt;tableName&gt;</li>";
 		body += "</ul>\n";
 		
-		return body;
+		return getResponseWithHeaders(body, HttpResponseCode.OK);
 	}
 	
 }
