@@ -51,6 +51,13 @@ public class RESTHandler {
 		}
 	}
 	
+	/**
+	 * This method defines a response with CORS (cross-origin resource sharing) enabled
+	 * (in order to avoid problems with requests through swagger).
+	 * @param content	Body content
+	 * @param status	Response status
+	 * @return			Response including the headers to enable CORS and the body.
+	 */
 	private static Response getResponseWithHeaders(String content, HttpResponseCode status) {
 		return Response.ok(content).
 				status(status.getValue()).
