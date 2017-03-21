@@ -21,7 +21,6 @@ import main.java.utils.Utils;
 @Path("/")
 public class RESTHandler {
 	
-	final static String SEP = System.getProperty("file.separator");
 	final String CURR_DIR = this.getClass().getClassLoader().getResource("").getPath();
 	
 	/**
@@ -70,7 +69,7 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSwaggerJson() {
 		try {
-			final String fileName = CURR_DIR + SEP + ".." + SEP + ".." + SEP + "conf" + SEP + "swagger.json";
+			final String fileName = CURR_DIR + Utils.SEP + ".." + Utils.SEP + ".." + Utils.SEP + Utils.SWAGGER_FILE;
 			return getResponseWithHeaders(Utils.readFile(fileName), HttpResponseCode.OK);
 		} catch (Exception e) {
 			return getResponseWithHeaders(e.getMessage(), HttpResponseCode.NOK);

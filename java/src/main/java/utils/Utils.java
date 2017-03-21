@@ -17,8 +17,10 @@ import java.util.Vector;
  */
 public final class Utils {
 
-	public static final String DB_CONF = "conf/db.properties";
-	public static final String REST_CONF = "conf/rest.properties";
+	public final static String SEP = System.getProperty("file.separator");
+	public static final String DB_CONF = "conf" + SEP + "db.properties";
+	public static final String REST_CONF = "conf" + SEP + "rest.properties";
+	public static final String SWAGGER_FILE = "conf" + SEP + "swagger.json";
 	
 	/**
 	 * Get the DB connection properties
