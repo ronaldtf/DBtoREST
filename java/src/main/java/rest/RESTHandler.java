@@ -29,7 +29,10 @@ public class RESTHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public static String getSwaggerJson() {
 		try {
-			return Utils.readFile("conf/swagger.json");
+			return System.getProperty("user.dir") + 
+				      System.getProperty("file.separator") + "conf/swagger.json";
+				      //Utils.readFile(System.getProperty("user.dir") + 
+				      //System.getProperty("file.separator") + "conf/swagger.json");
 		} catch (Exception e) {
 			return e.getMessage();
 		}
