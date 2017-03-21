@@ -121,7 +121,7 @@ c. Examples of curl GET request to the root (in this case, the response is alway
  
  ````bash
  curl -X GET 'http://localhost:8080/DBtoREST/'
- ``` 
+ ````
 
 ## Using Swagger-UI
  
@@ -134,7 +134,7 @@ c. Examples of curl GET request to the root (in this case, the response is alway
       } else {
         url = "http://localhost:8080/DBtoREST/swagger.json";
       }
- ```
+ ````
 
 Once the project is running as well as the _http-server_, we go to the default page <http://localhost:8080> and browse the swagger folder. We will immediately see the swagger interface as well as the REST available actions.
 
