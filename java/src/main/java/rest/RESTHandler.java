@@ -1,6 +1,5 @@
 package main.java.rest;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.ws.rs.GET;
