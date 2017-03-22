@@ -33,21 +33,30 @@ Below I show briefly the main implementation details:
 
 
 ## Requirements
-The project has been created in C++ an using a set of libraries. The set of libraries/APIs used here are mainly standard:
+The project has been created in C++ and Java and using a set of libraries. The set of libraries/APIs used here are mainly standard:
 
 1. MySQL (<https://www.mysql.com/>): In this project I opted to use the MySQL database, although any other kind of database should be possible. In order to execute the project, the MySQL database has to be installed on the system. Note that </code>db.properties</code> file has to be aligned with the database settings.
 
 2. MySQL connector (<https://www.mysql.com/products/connector/>): This is the plugin used to connect to the MySQL database.
 
-3. Restbed (<https://github.com/Corvusoft/restbed>): This library is used to create the REST service.
+3. curl (optional) (<https://curl.haxx.se/>): This tool can be used to make a request and get the response from the REST service.
 
-4. RapidJson (<http://rapidjson.org/>): This library is used to create JSON documents. However, note that, as mentioned above, in order to generate XML documents, a customized converter has been used.
+4. Swagger-UI (optional) (<http://swagger.io/swagger-ui/>): This API provides a friendly interface to access to a REST service.
 
-5. curl (optional) (<https://curl.haxx.se/>): This tool can be used to make a request and get the response from the REST service.
+5. http-server (optional) (<https://www.npmjs.com/package/http-server>): This application provides a generic web service (used together with swagger-ui).
 
-6. Swagger-UI (optional) (<http://swagger.io/swagger-ui/>): This API provides a friendly interface to access to a REST service.
+### Specific libraries for the C++ implementation
 
-7. http-server (optional) (<https://www.npmjs.com/package/http-server>): This application provides a generic web service (used together with swagger-ui).
+a. Restbed (<https://github.com/Corvusoft/restbed>): This library is used to create the REST service.
+
+b. RapidJson (<http://rapidjson.org/>): This library is used to create JSON documents. However, note that, as mentioned above, in order to generate XML documents, a customized converter has been used.
+
+### Specific libraries for the Java implementation
+
+a. Jersey (<https://jersey.java.net/>): This library is used to create the REST service.
+
+b. JSON-java (<https://github.com/stleary/JSON-java>): Library used in order to generate the JSON documents and to do the conversion to XML.
+
 
 ## Compilation and Execution
 
